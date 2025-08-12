@@ -1,0 +1,26 @@
+{
+  "name": "investing-portfolio",
+  "version": "1.0.0",
+  "description": "Full-stack investment portfolio application",
+  "scripts": {
+    "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm start\"",
+    "build": "cd frontend && npm run build",
+    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "docker:dev": "docker-compose up --build",
+    "docker:prod": "docker-compose -f docker-compose.prod.yml up --build",
+    "docker:down": "docker-compose down && docker-compose -f docker-compose.prod.yml down",
+    "clean": "rm -rf node_modules backend/node_modules frontend/node_modules",
+    "test": "cd frontend && npm test",
+    "start": "cd backend && npm start"
+  },
+  "keywords": ["investment", "portfolio", "react", "nodejs", "docker"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  }
+}

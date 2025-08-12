@@ -1,0 +1,38 @@
+[
+  {
+    "id": "acc-001",
+    "name": "Main Brokerage Account",
+    "type": "brokerage",
+    "provider": "Interactive Brokers",
+    "accountNumber": "U12345678",
+    "balance": 50000.00,
+    "currency": "USD",
+    "isActive": true,
+    "createdAt": "2024-01-15T08:00:00.000Z",
+    "updatedAt": "2024-01-15T08:00:00.000Z"
+  },
+  {
+    "id": "acc-002", 
+    "name": "Retirement 401k",
+    "type": "retirement",
+    "provider": "Fidelity",
+    "accountNumber": "401K987654",
+    "balance": 125000.00,
+    "currency": "USD",
+    "isActive": true,
+    "createdAt": "2024-01-10T09:30:00.000Z",
+    "updatedAt": "2024-01-10T09:30:00.000Z"
+  },
+  {
+    "id": "acc-003",
+    "name": "Emergency Savings",
+    "type": "savings",
+    "provider": "Chase Bank",
+    "accountNumber": "SAV555444",
+    "balance": 25000.00,
+    "currency": "USD",
+    "isActive": true,
+    "createdAt": "2024-01-05T10:15:00.000Z",
+    "updatedAt": "2024-01-05T10:15:00.000Z"
+  }
+]

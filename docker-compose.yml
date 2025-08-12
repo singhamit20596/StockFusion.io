@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "5001:5001"
+    environment:
+      - NODE_ENV=development
+      - PORT=5001
+    volumes:
+      # Mount the entire backend directory for development
+      - ./backend:/app
+      - /app/node_modules
+      # Mount data directory as a named volume for persistence
+      - investing_data:/app/data
+    networks:
+      - investing-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3002:3002"
+    environment:
+      - REACT_APP_API_URL=http://localhost:5001
+      - PORT=3002
+    volumes:
+      # Mount the entire frontend directory for development
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    networks:
+      - investing-network
+
+volumes:
+  # Named volume for persistent JSON data
+  investing_data:
+
+networks:
+  investing-network:
+    driver: bridge

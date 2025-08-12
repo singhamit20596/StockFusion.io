@@ -1,0 +1,72 @@
+[
+  {
+    "id": "stock-001",
+    "accountId": "acc-001",
+    "symbol": "AAPL",
+    "name": "Apple Inc.",
+    "quantity": 50,
+    "purchasePrice": 150.25,
+    "currentPrice": 185.50,
+    "purchaseDate": "2024-01-10T14:30:00.000Z",
+    "sector": "Technology",
+    "exchange": "NASDAQ",
+    "createdAt": "2024-01-10T14:30:00.000Z",
+    "updatedAt": "2024-01-15T16:00:00.000Z"
+  },
+  {
+    "id": "stock-002", 
+    "accountId": "acc-001",
+    "symbol": "GOOGL",
+    "name": "Alphabet Inc.",
+    "quantity": 25,
+    "purchasePrice": 2800.00,
+    "currentPrice": 2950.75,
+    "purchaseDate": "2024-01-08T11:45:00.000Z",
+    "sector": "Technology",
+    "exchange": "NASDAQ",
+    "createdAt": "2024-01-08T11:45:00.000Z",
+    "updatedAt": "2024-01-15T16:00:00.000Z"
+  },
+  {
+    "id": "stock-003",
+    "accountId": "acc-001",
+    "symbol": "MSFT",
+    "name": "Microsoft Corporation",
+    "quantity": 75,
+    "purchasePrice": 320.40,
+    "currentPrice": 375.25,
+    "purchaseDate": "2024-01-12T09:15:00.000Z",
+    "sector": "Technology",
+    "exchange": "NASDAQ",
+    "createdAt": "2024-01-12T09:15:00.000Z",
+    "updatedAt": "2024-01-15T16:00:00.000Z"
+  },
+  {
+    "id": "stock-004",
+    "accountId": "acc-002",
+    "symbol": "SPY",
+    "name": "SPDR S&P 500 ETF Trust",
+    "quantity": 200,
+    "purchasePrice": 450.00,
+    "currentPrice": 485.30,
+    "purchaseDate": "2024-01-05T10:00:00.000Z",
+    "sector": "ETF",
+    "exchange": "NYSE",
+    "createdAt": "2024-01-05T10:00:00.000Z",
+    "updatedAt": "2024-01-15T16:00:00.000Z"
+  },
+  {
+    "id": "stock-005",
+    "accountId": "acc-002",
+    "symbol": "VTI",
+    "name": "Vanguard Total Stock Market ETF",
+    "quantity": 150,
+    "purchasePrice": 220.75,
+    "currentPrice": 235.60,
+    "purchaseDate": "2024-01-03T13:20:00.000Z",
+    "sector": "ETF",
+    "exchange": "NYSE",
+    "createdAt": "2024-01-03T13:20:00.000Z",
+    "updatedAt": "2024-01-15T16:00:00.000Z"
+  }
+]

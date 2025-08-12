@@ -1,0 +1,39 @@
+# Production Docker Compose
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.prod
+    ports:
+      - "5001:5001"
+    environment:
+      - NODE_ENV=production
+      - PORT=5001
+    volumes:
+      # Named volume for persistent JSON data in production
+      - investing_data:/app/data
+    restart: unless-stopped
+    networks:
+      - investing-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prod
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - investing-network
+
+volumes:
+  # Named volume for persistent JSON data
+  investing_data:
+
+networks:
+  investing-network:
+    driver: bridge

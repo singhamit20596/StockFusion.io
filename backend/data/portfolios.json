@@ -1,0 +1,30 @@
+[
+  {
+    "id": "port-001",
+    "name": "Growth Portfolio",
+    "description": "Focus on high-growth technology stocks and ETFs",
+    "riskLevel": "moderate-aggressive",
+    "targetAllocation": {
+      "stocks": 70,
+      "bonds": 20,
+      "cash": 10
+    },
+    "isActive": true,
+    "createdAt": "2024-01-01T12:00:00.000Z",
+    "updatedAt": "2024-01-15T14:30:00.000Z"
+  },
+  {
+    "id": "port-002",
+    "name": "Retirement Portfolio",
+    "description": "Conservative long-term retirement savings strategy",
+    "riskLevel": "conservative",
+    "targetAllocation": {
+      "stocks": 40,
+      "bonds": 50,
+      "cash": 10
+    },
+    "isActive": true,
+    "createdAt": "2024-01-01T12:00:00.000Z",
+    "updatedAt": "2024-01-10T16:45:00.000Z"
+  }
+]

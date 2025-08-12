@@ -1,0 +1,20 @@
+[
+  {
+    "id": "pa-001",
+    "portfolioId": "port-001",
+    "accountId": "acc-001",
+    "addedAt": "2024-01-01T12:00:00.000Z"
+  },
+  {
+    "id": "pa-002",
+    "portfolioId": "port-002",
+    "accountId": "acc-002",
+    "addedAt": "2024-01-01T12:00:00.000Z"
+  },
+  {
+    "id": "pa-003",
+    "portfolioId": "port-002",
+    "accountId": "acc-003",
+    "addedAt": "2024-01-05T10:15:00.000Z"
+  }
+]

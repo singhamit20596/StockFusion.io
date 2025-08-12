@@ -1,0 +1,4 @@
+Name,Type,Balance,Currency,Description,Active
+Test Import Account 1,brokerage,50000,USD,Account imported via CSV,true
+Test Import Account 2,retirement,75000,USD,Another imported account,true
+Test Savings,savings,15000,USD,Imported savings account,true

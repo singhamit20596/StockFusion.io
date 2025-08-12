@@ -1,0 +1,163 @@
+[
+  {
+    "id": "acc-001",
+    "name": "Main Brokerage Account",
+    "type": "brokerage",
+    "provider": "Interactive Brokers",
+    "accountNumber": "U12345678",
+    "balance": 75829.65,
+    "currency": "USD",
+    "isActive": true,
+    "createdAt": "2024-01-15T08:00:00.000Z",
+    "updatedAt": "2025-08-10T14:26:50.692Z",
+    "metadata": {
+      "totalInvestment": 74790,
+      "totalProfitLoss": 1039.65,
+      "lastSyncedAt": "2025-08-10T14:26:50.692Z",
+      "source": "groww"
+    }
+  },
+  {
+    "id": "acc-002",
+    "name": "Retirement 401k",
+    "type": "retirement",
+    "provider": "Fidelity",
+    "accountNumber": "401K987654",
+    "balance": 125000,
+    "currency": "USD",
+    "isActive": true,
+    "createdAt": "2024-01-10T09:30:00.000Z",
+    "updatedAt": "2024-01-10T09:30:00.000Z"
+  },
+  {
+    "id": "acc-003",
+    "name": "Emergency Savings",
+    "type": "savings",
+    "provider": "Chase Bank",
+    "accountNumber": "SAV555444",
+    "balance": 25000,
+    "currency": "USD",
+    "isActive": true,
+    "createdAt": "2024-01-05T10:15:00.000Z",
+    "updatedAt": "2024-01-05T10:15:00.000Z"
+  },
+  {
+    "id": "17548370995825kw1c6zvx",
+    "name": "Test Sync Account",
+    "type": "investment",
+    "balance": 75829.65,
+    "currency": "USD",
+    "description": "",
+    "isActive": true,
+    "createdAt": "2025-08-10T14:44:59.582Z",
+    "updatedAt": "2025-08-10T14:46:11.295Z",
+    "metadata": {
+      "totalInvestment": 74790,
+      "totalProfitLoss": 1039.65,
+      "lastSyncedAt": "2025-08-10T14:46:11.295Z",
+      "source": "groww"
+    }
+  },
+  {
+    "id": "imported-1754841310592-1",
+    "name": "Test Import Account 1",
+    "type": "brokerage",
+    "balance": 50000,
+    "currency": "USD",
+    "description": "Account imported via CSV",
+    "isActive": true,
+    "createdAt": "2025-08-10T15:55:10.592Z",
+    "updatedAt": "2025-08-10T15:55:10.597Z",
+    "metadata": {}
+  },
+  {
+    "id": "imported-1754841310597-2",
+    "name": "Test Import Account 2",
+    "type": "retirement",
+    "balance": 75000,
+    "currency": "USD",
+    "description": "Another imported account",
+    "isActive": true,
+    "createdAt": "2025-08-10T15:55:10.597Z",
+    "updatedAt": "2025-08-10T15:55:10.597Z",
+    "metadata": {}
+  },
+  {
+    "id": "imported-1754841310597-3",
+    "name": "Test Savings",
+    "type": "savings",
+    "balance": 15000,
+    "currency": "USD",
+    "description": "Imported savings account",
+    "isActive": true,
+    "createdAt": "2025-08-10T15:55:10.597Z",
+    "updatedAt": "2025-08-10T15:55:10.597Z",
+    "metadata": {}
+  },
+  {
+    "id": "1754841429586ssuahqekg",
+    "name": "Amit-Grow",
+    "type": "investment",
+    "balance": 1000000,
+    "currency": "USD",
+    "description": "",
+    "isActive": true,
+    "createdAt": "2025-08-10T15:57:09.586Z",
+    "updatedAt": "2025-08-10T15:57:09.585Z"
+  },
+  {
+    "id": "1754841455830uxr67y6vx",
+    "name": "Amit-Grow",
+    "type": "investment",
+    "balance": 1000000,
+    "currency": "USD",
+    "description": "",
+    "isActive": true,
+    "createdAt": "2025-08-10T15:57:35.830Z",
+    "updatedAt": "2025-08-10T15:57:35.828Z"
+  },
+  {
+    "id": "1754841456931r2zxxg74x",
+    "name": "Amit-Grow",
+    "type": "investment",
+    "balance": 1000000,
+    "currency": "USD",
+    "description": "",
+    "isActive": true,
+    "createdAt": "2025-08-10T15:57:36.931Z",
+    "updatedAt": "2025-08-10T15:57:36.929Z"
+  },
+  {
+    "id": "1754841741190opy2375nj",
+    "name": "Test Trading Account",
+    "type": "trading",
+    "balance": 5000,
+    "currency": "USD",
+    "description": "",
+    "isActive": true,
+    "createdAt": "2025-08-10T16:02:21.190Z",
+    "updatedAt": "2025-08-10T16:02:21.189Z"
+  },
+  {
+    "id": "17548417488897prm318t7",
+    "name": "Test Investment Account",
+    "type": "investment",
+    "balance": 10000,
+    "currency": "USD",
+    "description": "",
+    "isActive": true,
+    "createdAt": "2025-08-10T16:02:28.890Z",
+    "updatedAt": "2025-08-10T16:02:28.888Z"
+  },
+  {
+    "id": "17548419162580yigzwoom",
+    "name": "Amit-Grow",
+    "type": "investment",
+    "balance": 1000000,
+    "currency": "USD",
+    "description": "",
+    "isActive": true,
+    "createdAt": "2025-08-10T16:05:16.258Z",
+    "updatedAt": "2025-08-10T16:05:16.256Z"
+  }
+]

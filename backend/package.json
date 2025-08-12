@@ -1,0 +1,33 @@
+{
+  "name": "investing-backend",
+  "version": "1.0.0",
+  "description": "Backend for investing portfolio application",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "seed": "node seedDatabase.js",
+    "install-scraping": "npm install puppeteer@21.3.6 puppeteer-extra@3.3.6 puppeteer-extra-plugin-stealth@2.11.2",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "investing",
+    "portfolio",
+    "express",
+    "nodejs"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "csv-parser": "^3.2.0",
+    "csv-writer": "^1.6.0",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "multer": "^2.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
