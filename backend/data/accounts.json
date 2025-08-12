@@ -5,17 +5,11 @@
     "type": "brokerage",
     "provider": "Interactive Brokers",
     "accountNumber": "U12345678",
-    "balance": 75829.65,
+    "balance": 50000,
     "currency": "USD",
     "isActive": true,
     "createdAt": "2024-01-15T08:00:00.000Z",
-    "updatedAt": "2025-08-10T14:26:50.692Z",
-    "metadata": {
-      "totalInvestment": 74790,
-      "totalProfitLoss": 1039.65,
-      "lastSyncedAt": "2025-08-10T14:26:50.692Z",
-      "source": "groww"
-    }
+    "updatedAt": "2024-01-15T08:00:00.000Z"
   },
   {
     "id": "acc-002",
@@ -42,122 +36,176 @@
     "updatedAt": "2024-01-05T10:15:00.000Z"
   },
   {
-    "id": "17548370995825kw1c6zvx",
-    "name": "Test Sync Account",
+    "id": "1754978113479hbypkr6zu",
+    "name": "Amit - Groww",
     "type": "investment",
-    "balance": 75829.65,
+    "balance": 100000,
     "currency": "USD",
     "description": "",
     "isActive": true,
-    "createdAt": "2025-08-10T14:44:59.582Z",
-    "updatedAt": "2025-08-10T14:46:11.295Z",
+    "createdAt": "2025-08-12T05:55:13.479Z",
+    "updatedAt": "2025-08-12T05:55:13.475Z"
+  },
+  {
+    "id": "1754980291391d4qplz088",
+    "name": "Amit",
+    "type": "investment",
+    "balance": 999999,
+    "currency": "USD",
+    "description": "",
+    "isActive": true,
+    "createdAt": "2025-08-12T06:31:31.391Z",
+    "updatedAt": "2025-08-12T06:31:31.388Z"
+  },
+  {
+    "id": "175498074973982ygt0gxl",
+    "name": "Test Demo Account",
+    "type": "investment",
+    "balance": 40759.5,
+    "currency": "USD",
+    "description": "",
+    "isActive": true,
+    "createdAt": "2025-08-12T06:39:09.739Z",
+    "updatedAt": "2025-08-12T06:39:23.723Z",
     "metadata": {
-      "totalInvestment": 74790,
-      "totalProfitLoss": 1039.65,
-      "lastSyncedAt": "2025-08-10T14:46:11.295Z",
+      "totalInvestment": 39000,
+      "totalProfitLoss": 1759.5,
+      "lastSyncedAt": "2025-08-12T06:39:23.723Z",
       "source": "groww"
     }
   },
   {
-    "id": "imported-1754841310592-1",
-    "name": "Test Import Account 1",
-    "type": "brokerage",
-    "balance": 50000,
-    "currency": "USD",
-    "description": "Account imported via CSV",
-    "isActive": true,
-    "createdAt": "2025-08-10T15:55:10.592Z",
-    "updatedAt": "2025-08-10T15:55:10.597Z",
-    "metadata": {}
-  },
-  {
-    "id": "imported-1754841310597-2",
-    "name": "Test Import Account 2",
-    "type": "retirement",
-    "balance": 75000,
-    "currency": "USD",
-    "description": "Another imported account",
-    "isActive": true,
-    "createdAt": "2025-08-10T15:55:10.597Z",
-    "updatedAt": "2025-08-10T15:55:10.597Z",
-    "metadata": {}
-  },
-  {
-    "id": "imported-1754841310597-3",
-    "name": "Test Savings",
-    "type": "savings",
-    "balance": 15000,
-    "currency": "USD",
-    "description": "Imported savings account",
-    "isActive": true,
-    "createdAt": "2025-08-10T15:55:10.597Z",
-    "updatedAt": "2025-08-10T15:55:10.597Z",
-    "metadata": {}
-  },
-  {
-    "id": "1754841429586ssuahqekg",
-    "name": "Amit-Grow",
+    "id": "1754980821140oeg98vi0i",
+    "name": "Amit",
     "type": "investment",
-    "balance": 1000000,
+    "balance": 100000,
     "currency": "USD",
     "description": "",
     "isActive": true,
-    "createdAt": "2025-08-10T15:57:09.586Z",
-    "updatedAt": "2025-08-10T15:57:09.585Z"
+    "createdAt": "2025-08-12T06:40:21.140Z",
+    "updatedAt": "2025-08-12T06:40:21.137Z"
   },
   {
-    "id": "1754841455830uxr67y6vx",
-    "name": "Amit-Grow",
+    "id": "1754982448621ci8ndgm05",
+    "name": "Test New Flow Account",
     "type": "investment",
-    "balance": 1000000,
+    "balance": 40759.5,
     "currency": "USD",
     "description": "",
     "isActive": true,
-    "createdAt": "2025-08-10T15:57:35.830Z",
-    "updatedAt": "2025-08-10T15:57:35.828Z"
+    "createdAt": "2025-08-12T07:07:28.621Z",
+    "updatedAt": "2025-08-12T07:20:30.269Z",
+    "metadata": {
+      "totalInvestment": 39000,
+      "totalProfitLoss": 1759.5,
+      "lastSyncedAt": "2025-08-12T07:20:30.269Z",
+      "source": "groww"
+    }
   },
   {
-    "id": "1754841456931r2zxxg74x",
-    "name": "Amit-Grow",
+    "id": "1754985456401m0yy8d2yc",
+    "name": "Amit - Grow - 1",
     "type": "investment",
-    "balance": 1000000,
+    "balance": 0,
     "currency": "USD",
     "description": "",
     "isActive": true,
-    "createdAt": "2025-08-10T15:57:36.931Z",
-    "updatedAt": "2025-08-10T15:57:36.929Z"
+    "createdAt": "2025-08-12T07:57:36.401Z",
+    "updatedAt": "2025-08-12T07:57:36.398Z"
   },
   {
-    "id": "1754841741190opy2375nj",
-    "name": "Test Trading Account",
-    "type": "trading",
-    "balance": 5000,
-    "currency": "USD",
-    "description": "",
-    "isActive": true,
-    "createdAt": "2025-08-10T16:02:21.190Z",
-    "updatedAt": "2025-08-10T16:02:21.189Z"
-  },
-  {
-    "id": "17548417488897prm318t7",
-    "name": "Test Investment Account",
+    "id": "1754985467483ipo2scemi",
+    "name": "Amit - Grow - 1",
     "type": "investment",
-    "balance": 10000,
+    "balance": 40759.5,
     "currency": "USD",
     "description": "",
     "isActive": true,
-    "createdAt": "2025-08-10T16:02:28.890Z",
-    "updatedAt": "2025-08-10T16:02:28.888Z"
+    "createdAt": "2025-08-12T07:57:47.483Z",
+    "updatedAt": "2025-08-12T07:59:16.992Z",
+    "metadata": {
+      "totalInvestment": 39000,
+      "totalProfitLoss": 1759.5,
+      "lastSyncedAt": "2025-08-12T07:59:16.992Z",
+      "source": "groww"
+    }
   },
   {
-    "id": "17548419162580yigzwoom",
-    "name": "Amit-Grow",
+    "id": "17549860566572h5tm4af7",
+    "name": "Test Real Groww Login",
     "type": "investment",
-    "balance": 1000000,
+    "balance": 40759.5,
     "currency": "USD",
     "description": "",
     "isActive": true,
-    "createdAt": "2025-08-10T16:05:16.258Z",
-    "updatedAt": "2025-08-10T16:05:16.256Z"
+    "createdAt": "2025-08-12T08:07:36.657Z",
+    "updatedAt": "2025-08-12T08:21:25.008Z",
+    "metadata": {
+      "totalInvestment": 39000,
+      "totalProfitLoss": 1759.5,
+      "lastSyncedAt": "2025-08-12T08:21:25.007Z",
+      "source": "groww"
+    }
+  },
+  {
+    "id": "17549861530486hnvy03iu",
+    "name": "1",
+    "type": "investment",
+    "balance": 40759.5,
+    "currency": "USD",
+    "description": "",
+    "isActive": true,
+    "createdAt": "2025-08-12T08:09:13.048Z",
+    "updatedAt": "2025-08-12T08:11:19.348Z",
+    "metadata": {
+      "totalInvestment": 39000,
+      "totalProfitLoss": 1759.5,
+      "lastSyncedAt": "2025-08-12T08:11:19.348Z",
+      "source": "groww"
+    }
+  },
+  {
+    "id": "1754986970137peh3w9669",
+    "name": "2",
+    "type": "investment",
+    "balance": 40759.5,
+    "currency": "USD",
+    "description": "",
+    "isActive": true,
+    "createdAt": "2025-08-12T08:22:50.137Z",
+    "updatedAt": "2025-08-12T08:23:50.445Z",
+    "metadata": {
+      "totalInvestment": 39000,
+      "totalProfitLoss": 1759.5,
+      "lastSyncedAt": "2025-08-12T08:23:50.445Z",
+      "source": "groww"
+    }
+  },
+  {
+    "id": "1754988856625fst6gi3y0",
+    "name": "3",
+    "type": "investment",
+    "balance": 0,
+    "currency": "USD",
+    "description": "",
+    "isActive": true,
+    "createdAt": "2025-08-12T08:54:16.625Z",
+    "updatedAt": "2025-08-12T08:54:16.623Z"
+  },
+  {
+    "id": "1754990095241ekdwr89ru",
+    "name": "4",
+    "type": "investment",
+    "balance": 0,
+    "currency": "USD",
+    "description": "",
+    "isActive": true,
+    "createdAt": "2025-08-12T09:14:55.241Z",
+    "updatedAt": "2025-08-12T09:15:31.004Z",
+    "metadata": {
+      "lastSyncAt": "2025-08-12T09:15:30.978Z",
+      "lastSyncStatus": "failed",
+      "lastSyncError": "User not logged in or session expired"
+    }
   }
 ]

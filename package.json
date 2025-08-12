@@ -11,7 +11,10 @@
     "docker:down": "docker-compose down && docker-compose -f docker-compose.prod.yml down",
     "clean": "rm -rf node_modules backend/node_modules frontend/node_modules",
     "test": "cd frontend && npm test",
-    "start": "cd backend && npm start"
+    "start": "cd backend && npm start",
+    "scraping:install": "cd backend && npm run install-scraping",
+    "scraping:mock": "cd backend && node -e \"const fs=require('fs'); const env=fs.readFileSync('.env','utf8').replace(/SCRAPING_MODE=.*/,'SCRAPING_MODE=mock'); fs.writeFileSync('.env',env);\" && echo Switched to MOCK mode",
+    "scraping:real": "cd backend && node -e \"const fs=require('fs'); const env=fs.readFileSync('.env','utf8').replace(/SCRAPING_MODE=.*/,'SCRAPING_MODE=real'); fs.writeFileSync('.env',env);\" && echo Switched to REAL mode"
   },
   "keywords": ["investment", "portfolio", "react", "nodejs", "docker"],
   "author": "",

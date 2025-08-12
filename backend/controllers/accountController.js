@@ -237,14 +237,13 @@ class AccountController {
   }
 
   /**
-   * Sync account with Groww platform
+   * Sync account with Groww platform - REAL-TIME IMPLEMENTATION ONLY
    * POST /api/accounts/:id/sync
    */
   async syncWithGroww(req, res) {
     try {
       const { id } = req.params;
-      const { username, password, pin, otp } = req.body;
-
+      
       // Verify account exists
       const account = await fileService.findById('accounts.json', id);
       if (!account) {
@@ -254,56 +253,114 @@ class AccountController {
         });
       }
 
-      // Check if this is a re-sync request (no credentials provided)
-      const isResync = !username && !password && !pin;
+      console.log(`� Starting REAL-TIME Groww sync for account: ${account.name} (${id})`);
+
+      // Check if this is an automated sync (user logged in via popup)
+      const isAutomatedSync = req.body.automated || req.headers['x-automated-sync'];
       
-      if (!isResync) {
-        // Validate required credentials for new sync
-        if (!username || !password || !pin) {
-          return res.status(400).json({
-            success: false,
-            message: 'Username, password, and PIN are required for new account sync'
+      if (!isAutomatedSync) {
+        return res.status(400).json({
+          success: false,
+          message: 'Only automated sync is supported. Please use the "Login with Groww" button.',
+          requiresGrowwLogin: true
+        });
+      }
+
+      console.log(`🤖 Using REAL-TIME automated sync for account: ${account.name}`);
+      
+      // Generate session ID for progress tracking
+      const sessionId = `sync-${id}-${Date.now()}`;
+      
+      // Set up Server-Sent Events for progress updates (optional)
+      if (req.headers.accept && req.headers.accept.includes('text/event-stream')) {
+        res.writeHead(200, {
+          'Content-Type': 'text/event-stream',
+          'Cache-Control': 'no-cache',
+          'Connection': 'keep-alive',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Headers': 'Cache-Control'
+        });
+
+        // Set up progress callback for real-time updates
+        scrapingService.setProgressCallback(sessionId, (percentage, message) => {
+          res.write(`data: ${JSON.stringify({ percentage, message })}\n\n`);
+        });
+      }
+
+      try {
+        // Perform real-time automated sync
+        const syncResult = await scrapingService.syncGrowwAccountRealTime(id, {
+          sessionId,
+          userLoggedIn: true,
+          isAutomated: true
+        });
+
+        if (!syncResult.success) {
+          // Send error via SSE if applicable
+          if (req.headers.accept && req.headers.accept.includes('text/event-stream')) {
+            res.write(`data: ${JSON.stringify({ error: syncResult.message })}\n\n`);
+            res.end();
+          } else {
+            return res.status(400).json({
+              success: false,
+              message: syncResult.message,
+              data: syncResult
+            });
+          }
+          return;
+        }
+
+        // Send success response
+        if (req.headers.accept && req.headers.accept.includes('text/event-stream')) {
+          res.write(`data: ${JSON.stringify({ 
+            success: true, 
+            message: syncResult.message,
+            data: syncResult.data,
+            completed: true
+          })}\n\n`);
+          res.end();
+        } else {
+          return res.json({
+            success: true,
+            message: syncResult.message,
+            data: syncResult.data
           });
         }
-      } else {
-        // For re-sync, check if account has previous sync data
-        const syncStatus = await scrapingService.getSyncStatus(id);
-        if (!syncStatus.success || !syncStatus.data.hasGrowwData) {
-          return res.status(400).json({
+
+      } catch (syncError) {
+        console.error('❌ Real-time sync failed:', syncError.message);
+        
+        if (req.headers.accept && req.headers.accept.includes('text/event-stream')) {
+          res.write(`data: ${JSON.stringify({ 
+            error: `Real-time sync failed: ${syncError.message}`,
+            requiresPuppeteer: syncError.message.includes('Puppeteer')
+          })}\n\n`);
+          res.end();
+        } else {
+          return res.status(500).json({
             success: false,
-            message: 'Account has no previous sync data. Please provide credentials for initial sync.'
+            message: `Real-time sync failed: ${syncError.message}`,
+            error: syncError.message,
+            requiresPuppeteer: syncError.message.includes('Puppeteer')
           });
         }
       }
-
-      console.log(`🔄 Starting Groww ${isResync ? 'resync' : 'sync'} for account: ${account.name}`);
-
-      // Perform sync using scraping service
-      const syncResult = await scrapingService.syncGrowwAccount(id, {
-        username,
-        password,
-        pin,
-        otp,
-        isResync
-      });
-
-      if (!syncResult.success) {
-        return res.status(400).json(syncResult);
-      }
-
-      res.json({
-        success: true,
-        message: syncResult.message,
-        data: syncResult.data
-      });
 
     } catch (error) {
-      console.error('❌ Sync error:', error.message);
-      res.status(500).json({
-        success: false,
-        message: 'Error syncing with Groww',
-        error: error.message
-      });
+      console.error('❌ Sync controller error:', error.message);
+      
+      if (req.headers.accept && req.headers.accept.includes('text/event-stream')) {
+        res.write(`data: ${JSON.stringify({ 
+          error: `Controller error: ${error.message}`
+        })}\n\n`);
+        res.end();
+      } else {
+        res.status(500).json({
+          success: false,
+          message: 'Error syncing with Groww',
+          error: error.message
+        });
+      }
     }
   }
 
@@ -358,6 +415,117 @@ class AccountController {
       res.status(500).json({
         success: false,
         message: 'Error clearing sync data',
+        error: error.message
+      });
+    }
+  }
+
+  /**
+   * Initiate Groww OAuth flow
+   * POST /api/accounts/:id/auth/groww
+   */
+  async initiateGrowwAuth(req, res) {
+    try {
+      const { id } = req.params;
+      const account = await fileService.findById('accounts.json', id);
+      
+      if (!account) {
+        return res.status(404).json({
+          success: false,
+          message: 'Account not found'
+        });
+      }
+
+      // Generate OAuth state for security
+      const state = `${id}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      
+      // In a real implementation, you would store the state securely
+      // For now, we'll use localStorage on the frontend
+      
+      // Groww OAuth URL (Note: This is a placeholder - Groww doesn't have public OAuth)
+      const redirectUri = `${req.protocol}://${req.get('host')}/auth/groww/callback`;
+      const authUrl = `https://groww.in/oauth/authorize?` +
+        `client_id=your_client_id&` +
+        `response_type=code&` +
+        `scope=portfolio+holdings&` +
+        `state=${state}&` +
+        `redirect_uri=${encodeURIComponent(redirectUri)}`;
+
+      res.json({
+        success: true,
+        data: {
+          authUrl,
+          state,
+          redirectUri
+        }
+      });
+
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: 'Error initiating Groww authentication',
+        error: error.message
+      });
+    }
+  }
+
+  /**
+   * Handle Groww OAuth callback
+   * POST /api/accounts/:id/auth/groww/callback
+   */
+  async handleGrowwCallback(req, res) {
+    try {
+      const { id } = req.params;
+      const { code, state, error } = req.body;
+
+      if (error) {
+        return res.status(400).json({
+          success: false,
+          message: `OAuth error: ${error}`
+        });
+      }
+
+      if (!code || !state) {
+        return res.status(400).json({
+          success: false,
+          message: 'Missing authorization code or state'
+        });
+      }
+
+      const account = await fileService.findById('accounts.json', id);
+      if (!account) {
+        return res.status(404).json({
+          success: false,
+          message: 'Account not found'
+        });
+      }
+
+      // In a real implementation, you would:
+      // 1. Verify the state parameter
+      // 2. Exchange the authorization code for access tokens
+      // 3. Store the tokens securely
+      // 4. Use the tokens to access Groww's API
+
+      console.log(`🔐 OAuth callback received for account ${id}`);
+      console.log(`📝 Authorization code: ${code}`);
+      console.log(`🔒 State: ${state}`);
+
+      // For now, simulate successful token exchange and trigger sync
+      const syncResult = await this.syncWithGroww(req, res, true);
+      
+      res.json({
+        success: true,
+        message: 'OAuth authentication successful',
+        data: {
+          accountId: id,
+          authenticated: true
+        }
+      });
+
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: 'Error handling OAuth callback',
         error: error.message
       });
     }

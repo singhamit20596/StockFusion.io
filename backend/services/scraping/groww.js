@@ -10,8 +10,9 @@ try {
   isPuppeteerAvailable = true;
   console.log('✅ Puppeteer dependencies loaded successfully');
 } catch (error) {
-  console.warn('⚠️ Puppeteer dependencies not installed. Using mock scraper for development.');
+  console.warn('⚠️ Puppeteer dependencies not installed. Real scraping not available.');
   console.warn('To enable real scraping, run: npm run install-scraping');
+  isPuppeteerAvailable = false;
 }
 
 // Import mock scraper as fallback

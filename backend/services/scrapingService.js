@@ -1,21 +1,158 @@
-const GrowwScraper = require('./scraping/mockGroww'); // Use mock scraper by default
 const fileService = require('./fileService');
 const Stock = require('../models/Stock');
 const Account = require('../models/Account');
+require('dotenv').config();
 
 /**
- * Scraping Service
- * Handles integration of scraped data with our application
+ * Real-Time Scraping Service
+ * ONLY uses real Puppeteer scraping - Mock data disabled for production use
  */
 class ScrapingService {
+  constructor() {
+    this.realScraper = null;
+    this.progressCallbacks = new Map(); // Store progress callbacks by session ID
+    this.initializeRealScraper();
+  }
+
+  /**
+   * Initialize ONLY the real scraper - no mock fallback
+   */
+  initializeRealScraper() {
+    try {
+      // Import and initialize real scraper
+      const RealGrowwScraper = require('./scraping/realGroww');
+      this.realScraper = new RealGrowwScraper();
+      console.log('✅ Real Groww scraper initialized (Real-time mode)');
+    } catch (error) {
+      console.error('❌ Failed to initialize real scraper:', error.message);
+      console.log('💡 To enable real scraping, run: npm run install-scraping');
+      this.realScraper = null;
+    }
+  }
+
+  /**
+   * Set progress callback for real-time updates during scraping
+   */
+  setProgressCallback(sessionId, callback) {
+    this.progressCallbacks.set(sessionId, callback);
+    console.log(`📊 Progress callback set for session: ${sessionId}`);
+  }
+
+  /**
+   * Remove progress callback after scraping completes
+   */
+  removeProgressCallback(sessionId) {
+    this.progressCallbacks.delete(sessionId);
+    console.log(`🧹 Progress callback removed for session: ${sessionId}`);
+  }
+
+  /**
+   * Main method: Real-time Groww account synchronization with progress tracking
+   * This method performs the complete flow:
+   * 1. User logs in on Groww popup
+   * 2. Automated navigation to Holdings page  
+   * 3. Real-time scraping with progress updates
+   * 4. Data processing and storage
+   * 5. Browser cleanup
+   */
+  async syncGrowwAccountRealTime(accountId, options = {}) {
+    const sessionId = options.sessionId || `session-${Date.now()}`;
+    
+    console.log(`🚀 Starting REAL-TIME Groww sync for account: ${accountId}`);
+    console.log(`📊 Session ID: ${sessionId}`);
+
+    // Validate real scraper availability
+    if (!this.realScraper) {
+      const error = 'Real scraper not available. Install Puppeteer: npm run install-scraping';
+      console.error('❌', error);
+      throw new Error(error);
+    }
+
+    const account = await fileService.findById('accounts.json', accountId);
+    if (!account) {
+      throw new Error('Account not found');
+    }
+
+    try {
+      // Set up progress callback if provided
+      const progressCallback = this.progressCallbacks.get(sessionId);
+      
+      console.log(`🎯 Starting automated scraping for: ${account.name}`);
+      
+      // Perform complete automated scraping with progress tracking
+      const scrapingResult = await this.realScraper.performAutomatedScraping(progressCallback);
+      
+      if (!scrapingResult.success) {
+        throw new Error(scrapingResult.message);
+      }
+
+      console.log(`� Raw data scraped: ${scrapingResult.data.length} holdings`);
+
+      // Process and store the scraped data
+      const processedStocks = await this.processScrapedData(accountId, scrapingResult.data);
+      
+      // Calculate portfolio summary
+      const portfolioSummary = this.calculatePortfolioSummary(processedStocks);
+      
+      // Update account with sync timestamp
+      await this.updateAccountSyncStatus(accountId, {
+        lastSyncAt: new Date().toISOString(),
+        lastSyncStatus: 'success',
+        stocksCount: processedStocks.length,
+        totalValue: portfolioSummary.totalValue
+      });
+
+      // Clean up progress callback
+      this.removeProgressCallback(sessionId);
+
+      console.log(`✅ Real-time sync completed for: ${account.name}`);
+      console.log(`📈 Portfolio summary: ${processedStocks.length} stocks, ₹${portfolioSummary.totalValue.toFixed(2)}`);
+
+      return {
+        success: true,
+        message: `Successfully synced ${processedStocks.length} holdings from Groww (real-time)`,
+        data: {
+          account: await fileService.findById('accounts.json', accountId),
+          stocks: processedStocks,
+          summary: {
+            totalStocks: processedStocks.length,
+            totalValue: portfolioSummary.totalValue,
+            totalInvestment: portfolioSummary.totalInvestment,
+            totalProfitLoss: portfolioSummary.totalProfitLoss,
+            totalProfitLossPercentage: portfolioSummary.totalProfitLossPercentage,
+            syncedAt: new Date().toISOString(),
+            source: 'real-time-groww'
+          },
+          isRealTime: true
+        }
+      };
+
+    } catch (error) {
+      console.error('❌ Real-time sync failed:', error.message);
+      
+      // Clean up progress callback on error
+      this.removeProgressCallback(sessionId);
+      
+      // Update account with error status
+      await this.updateAccountSyncStatus(accountId, {
+        lastSyncAt: new Date().toISOString(),
+        lastSyncStatus: 'failed',
+        lastSyncError: error.message
+      });
+
+      throw new Error(`Real-time scraping failed: ${error.message}`);
+    }
+  }
+
   /**
    * Sync account data from Groww
    * @param {string} accountId - Account ID to sync
    * @param {Object} credentials - Groww login credentials
    */
-  async syncGrowwAccount(accountId, credentials) {
+  async syncGrowwAccount(accountId, credentials = {}) {
     try {
       console.log(`🔄 Starting Groww sync for account: ${accountId}`);
+      console.log(`📍 Using ${this.isRealScrapingAvailable ? 'REAL-TIME' : 'MOCK'} scraper`);
 
       // Verify account exists
       const account = await fileService.findById('accounts.json', accountId);
@@ -26,30 +163,49 @@ class ScrapingService {
         };
       }
 
-      // Try to use real scraper if available, fallback to mock
-      let scraper;
-      try {
-        // For now, always use mock scraper until Puppeteer is properly installed
-        // const RealGrowwScraper = require('./scraping/groww');
-        // scraper = new RealGrowwScraper();
-        // console.log('🔍 Using real Groww scraper');
-        throw new Error('Using mock for development');
-      } catch (error) {
-        scraper = new GrowwScraper(); // This is the mock scraper
-        console.log('🎭 Using mock Groww scraper (Puppeteer not available)');
+      // Check if this is a credential-less sync (demo mode)
+      const hasCredentials = credentials.username && credentials.password && credentials.pin;
+      const isResync = credentials.isResync;
+      
+      // For mock mode or credential-less sync, use demo credentials
+      let syncCredentials = credentials;
+      if (!hasCredentials && this.scrapingMode === 'mock') {
+        console.log('🎭 Using demo credentials for mock sync');
+        syncCredentials = {
+          username: 'demo@groww.com',
+          password: 'demo123',
+          pin: '1234',
+          isDemo: true,
+          isAutomated: credentials.isAutomated,
+          userLoggedIn: credentials.userLoggedIn
+        };
+      } else if (this.isRealScrapingAvailable && !hasCredentials && !isResync) {
+        return {
+          success: false,
+          message: 'Username, password, and PIN are required for real-time scraping'
+        };
       }
       
-            // Scrape data from Groww
-      const scrapingResult = await scraper.scrapeGrowwData(credentials);
+      // Add automation flags to credentials
+      syncCredentials = {
+        ...syncCredentials,
+        isAutomated: credentials.isAutomated,
+        userLoggedIn: credentials.userLoggedIn,
+        automationFallback: credentials.automationFallback
+      };
+      
+      // Scrape data from Groww
+      const scrapingResult = await this.scraper.scrapeGrowwData(syncCredentials);
       
       if (!scrapingResult.success) {
         // Handle the case where Puppeteer is not installed
         if (scrapingResult.requiresInstallation) {
           return {
             success: false,
-            message: 'Scraping functionality requires additional dependencies. Please install Puppeteer packages.',
+            message: 'Real-time scraping functionality requires additional dependencies. Please install Puppeteer packages.',
             requiresInstallation: true,
-            installCommand: 'npm run install-scraping'
+            installCommand: 'npm run install-scraping',
+            fallbackMessage: 'Currently using mock data for demonstration.'
           };
         }
         return scrapingResult;
@@ -81,7 +237,8 @@ class ScrapingService {
         },
         message: scrapingResult.isMockData 
           ? `Successfully synced ${savedStocks.length} mock holdings from Groww (demo mode)`
-          : `Successfully synced ${savedStocks.length} holdings from Groww`
+          : `Successfully synced ${savedStocks.length} real holdings from Groww`,
+        isRealTimeData: this.isRealScrapingAvailable && !scrapingResult.isMockData
       };
 
     } catch (error) {
@@ -263,6 +420,34 @@ class ScrapingService {
         success: false,
         message: `Failed to clear sync data: ${error.message}`
       };
+    }
+  }
+
+  /**
+   * Update account sync status and metadata
+   */
+  async updateAccountSyncStatus(accountId, syncData) {
+    try {
+      const account = await fileService.findById('accounts.json', accountId);
+      if (!account) {
+        throw new Error('Account not found');
+      }
+
+      // Update account with sync metadata
+      const updateData = {
+        metadata: {
+          ...account.metadata,
+          ...syncData
+        },
+        updatedAt: new Date().toISOString()
+      };
+
+      await fileService.updateById('accounts.json', accountId, updateData);
+      console.log(`✅ Updated account ${accountId} with sync data`);
+      
+    } catch (error) {
+      console.error(`❌ Failed to update account sync status:`, error.message);
+      throw error;
     }
   }
 }

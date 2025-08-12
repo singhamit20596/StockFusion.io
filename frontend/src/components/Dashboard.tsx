@@ -82,8 +82,8 @@ export default function Dashboard() {
         getAccounts(),
       ]);
 
-      const stocksData = stocksResponse.data;
-      const accountsData = accountsResponse.data;
+      const stocksData = stocksResponse.data.data;
+      const accountsData = accountsResponse.data.data;
 
       setStocks(stocksData);
 

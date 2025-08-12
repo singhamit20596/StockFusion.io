@@ -77,7 +77,7 @@ export default function Layout({ children, currentPage, onPageChange, onDataRefr
     try {
       setLoading(true);
       const accountsResponse = await getAccounts();
-      const accountsData = accountsResponse.data;
+      const accountsData = accountsResponse.data.data;
 
       // Fetch sync status for each account
       const accountsWithSync = await Promise.all(

@@ -100,30 +100,36 @@ export interface SyncStatus {
 export const getHealth = () => api.get('/health');
 
 // Accounts
-export const getAccounts = () => api.get<Account[]>('/api/accounts');
-export const getAccount = (id: string) => api.get<Account>(`/api/accounts/${id}`);
-export const createAccount = (account: Omit<Account, 'id'>) => api.post<Account>('/api/accounts', account);
-export const updateAccount = (id: string, account: Partial<Account>) => api.put<Account>(`/api/accounts/${id}`, account);
+export const getAccounts = () => api.get<{success: boolean; data: Account[]; count: number}>('/api/accounts');
+export const getAccount = (id: string) => api.get<{success: boolean; data: Account}>(`/api/accounts/${id}`);
+export const createAccount = (account: Omit<Account, 'id'>) => api.post<{success: boolean; data: Account}>('/api/accounts', account);
+export const updateAccount = (id: string, account: Partial<Account>) => api.put<{success: boolean; data: Account}>(`/api/accounts/${id}`, account);
 export const deleteAccount = (id: string) => api.delete(`/api/accounts/${id}`);
 export const getAccountSummary = (id: string) => api.get(`/api/accounts/${id}/summary`);
 
 // Groww Integration
 export const syncWithGroww = (accountId: string, credentials: SyncCredentials) =>
   api.post<SyncResponse>(`/api/accounts/${accountId}/sync`, credentials);
-export const syncAccount = (accountId: string) =>
-  api.post<SyncResponse>(`/api/accounts/${accountId}/sync`);
+export const syncAccount = (accountId: string, options?: { automated?: boolean }) =>
+  api.post<SyncResponse>(`/api/accounts/${accountId}/sync`, options || {});
 export const getSyncStatus = (accountId: string) =>
   api.get<{ success: boolean; data: SyncStatus }>(`/api/accounts/${accountId}/sync/status`);
 export const clearSyncData = (accountId: string) =>
   api.delete(`/api/accounts/${accountId}/sync`);
 
+// OAuth Integration
+export const initiateGrowwAuth = (accountId: string) =>
+  api.post<{ success: boolean; data: { authUrl: string; state: string; redirectUri: string } }>(`/api/accounts/${accountId}/auth/groww`);
+export const handleGrowwCallback = (accountId: string, code: string, state: string) =>
+  api.post<{ success: boolean; data: { accountId: string; authenticated: boolean } }>(`/api/accounts/${accountId}/auth/groww/callback`, { code, state });
+
 // Stocks
-export const getStocks = () => api.get<Stock[]>('/api/stocks');
-export const getStock = (id: string) => api.get<Stock>(`/api/stocks/${id}`);
-export const getStocksByAccount = (accountId: string) => api.get<Stock[]>(`/api/stocks/account/${accountId}`);
+export const getStocks = () => api.get<{success: boolean; data: Stock[]; count: number}>('/api/stocks');
+export const getStock = (id: string) => api.get<{success: boolean; data: Stock}>(`/api/stocks/${id}`);
+export const getStocksByAccount = (accountId: string) => api.get<{success: boolean; data: Stock[]}>(`/api/stocks/account/${accountId}`);
 export const getStocksBySymbol = () => api.get('/api/stocks/symbols');
-export const createStock = (stock: Omit<Stock, 'id'>) => api.post<Stock>('/api/stocks', stock);
-export const updateStock = (id: string, stock: Partial<Stock>) => api.put<Stock>(`/api/stocks/${id}`, stock);
+export const createStock = (stock: Omit<Stock, 'id'>) => api.post<{success: boolean; data: Stock}>('/api/stocks', stock);
+export const updateStock = (id: string, stock: Partial<Stock>) => api.put<{success: boolean; data: Stock}>(`/api/stocks/${id}`, stock);
 export const deleteStock = (id: string) => api.delete(`/api/stocks/${id}`);
 export const updateStockPrice = (id: string, price: number) => 
   api.patch(`/api/stocks/${id}/price`, { currentPrice: price });

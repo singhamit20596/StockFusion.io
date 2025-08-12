@@ -112,7 +112,7 @@ export default function PortfolioBuilder() {
       ]);
 
       const portfoliosData = portfoliosResponse.data;
-      const accountsData = accountsResponse.data;
+      const accountsData = accountsResponse.data.data;
 
       // Fetch portfolio summaries to get accounts and totals
       const portfoliosWithAccounts = await Promise.all(

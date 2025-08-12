@@ -15,4 +15,8 @@ router.post('/accounts/:id/sync', accountController.syncWithGroww);
 router.get('/accounts/:id/sync/status', accountController.getSyncStatus);
 router.delete('/accounts/:id/sync', accountController.clearSyncData);
 
+// OAuth routes
+router.post('/accounts/:id/auth/groww', accountController.initiateGrowwAuth);
+router.post('/accounts/:id/auth/groww/callback', accountController.handleGrowwCallback);
+
 module.exports = router;

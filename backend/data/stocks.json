@@ -1,5 +1,47 @@
 [
   {
+    "id": "stock-001",
+    "accountId": "acc-001",
+    "symbol": "AAPL",
+    "name": "Apple Inc.",
+    "quantity": 50,
+    "purchasePrice": 150.25,
+    "currentPrice": 185.5,
+    "purchaseDate": "2024-01-10T14:30:00.000Z",
+    "sector": "Technology",
+    "exchange": "NASDAQ",
+    "createdAt": "2024-01-10T14:30:00.000Z",
+    "updatedAt": "2024-01-15T16:00:00.000Z"
+  },
+  {
+    "id": "stock-002",
+    "accountId": "acc-001",
+    "symbol": "GOOGL",
+    "name": "Alphabet Inc.",
+    "quantity": 25,
+    "purchasePrice": 2800,
+    "currentPrice": 2950.75,
+    "purchaseDate": "2024-01-08T11:45:00.000Z",
+    "sector": "Technology",
+    "exchange": "NASDAQ",
+    "createdAt": "2024-01-08T11:45:00.000Z",
+    "updatedAt": "2024-01-15T16:00:00.000Z"
+  },
+  {
+    "id": "stock-003",
+    "accountId": "acc-001",
+    "symbol": "MSFT",
+    "name": "Microsoft Corporation",
+    "quantity": 75,
+    "purchasePrice": 320.4,
+    "currentPrice": 375.25,
+    "purchaseDate": "2024-01-12T09:15:00.000Z",
+    "sector": "Technology",
+    "exchange": "NASDAQ",
+    "createdAt": "2024-01-12T09:15:00.000Z",
+    "updatedAt": "2024-01-15T16:00:00.000Z"
+  },
+  {
     "id": "stock-004",
     "accountId": "acc-002",
     "symbol": "SPY",
@@ -28,13 +70,13 @@
     "updatedAt": "2024-01-15T16:00:00.000Z"
   },
   {
-    "accountId": "acc-001",
+    "accountId": "175498074973982ygt0gxl",
     "symbol": "RELIANCE",
     "name": "Reliance Industries Ltd",
     "quantity": 10,
     "purchasePrice": 2350,
     "currentPrice": 2450.75,
-    "purchaseDate": "2025-08-10T14:26:50.691Z",
+    "purchaseDate": "2025-08-12T06:39:23.717Z",
     "sector": "Energy",
     "exchange": "NSE",
     "currentValue": 24507.5,
@@ -49,19 +91,19 @@
       "dailyChangePercentage": 1.2,
       "marketCap": "Large Cap",
       "subSector": "Oil & Gas",
-      "scrapedAt": "2025-08-10T14:26:50.690Z"
+      "scrapedAt": "2025-08-12T06:39:23.170Z"
     },
-    "createdAt": "2025-08-10T14:26:50.691Z",
-    "updatedAt": "2025-08-10T14:26:50.691Z"
+    "createdAt": "2025-08-12T06:39:23.717Z",
+    "updatedAt": "2025-08-12T06:39:23.717Z"
   },
   {
-    "accountId": "acc-001",
+    "accountId": "175498074973982ygt0gxl",
     "symbol": "TCS",
     "name": "Tata Consultancy Services Ltd",
     "quantity": 5,
     "purchasePrice": 3100,
     "currentPrice": 3250.4,
-    "purchaseDate": "2025-08-10T14:26:50.691Z",
+    "purchaseDate": "2025-08-12T06:39:23.718Z",
     "sector": "Information Technology",
     "exchange": "NSE",
     "currentValue": 16252,
@@ -76,73 +118,19 @@
       "dailyChangePercentage": -0.8,
       "marketCap": "Large Cap",
       "subSector": "Software",
-      "scrapedAt": "2025-08-10T14:26:50.690Z"
+      "scrapedAt": "2025-08-12T06:39:23.173Z"
     },
-    "createdAt": "2025-08-10T14:26:50.691Z",
-    "updatedAt": "2025-08-10T14:26:50.691Z"
+    "createdAt": "2025-08-12T06:39:23.718Z",
+    "updatedAt": "2025-08-12T06:39:23.718Z"
   },
   {
-    "accountId": "acc-001",
-    "symbol": "HDFCBANK",
-    "name": "HDFC Bank Ltd",
-    "quantity": 15,
-    "purchasePrice": 1650,
-    "currentPrice": 1580.25,
-    "purchaseDate": "2025-08-10T14:26:50.691Z",
-    "sector": "Financial Services",
-    "exchange": "NSE",
-    "currentValue": 23703.75,
-    "initialValue": 24750,
-    "gainLoss": {
-      "absolute": -1046.25,
-      "percentage": -4.2272727272727275
-    },
-    "metadata": {
-      "source": "groww",
-      "profitLossPercentage": -4.23,
-      "dailyChangePercentage": 0.5,
-      "marketCap": "Large Cap",
-      "subSector": "Private Bank",
-      "scrapedAt": "2025-08-10T14:26:50.690Z"
-    },
-    "createdAt": "2025-08-10T14:26:50.691Z",
-    "updatedAt": "2025-08-10T14:26:50.691Z"
-  },
-  {
-    "accountId": "acc-001",
-    "symbol": "INFY",
-    "name": "Infosys Ltd",
-    "quantity": 8,
-    "purchasePrice": 1380,
-    "currentPrice": 1420.8,
-    "purchaseDate": "2025-08-10T14:26:50.691Z",
-    "sector": "Information Technology",
-    "exchange": "NSE",
-    "currentValue": 11366.4,
-    "initialValue": 11040,
-    "gainLoss": {
-      "absolute": 326.39999999999964,
-      "percentage": 2.9565217391304315
-    },
-    "metadata": {
-      "source": "groww",
-      "profitLossPercentage": 2.96,
-      "dailyChangePercentage": 1.5,
-      "marketCap": "Large Cap",
-      "subSector": "Software",
-      "scrapedAt": "2025-08-10T14:26:50.690Z"
-    },
-    "createdAt": "2025-08-10T14:26:50.691Z",
-    "updatedAt": "2025-08-10T14:26:50.691Z"
-  },
-  {
-    "accountId": "17548370995825kw1c6zvx",
+    "accountId": "1754982448621ci8ndgm05",
     "symbol": "RELIANCE",
     "name": "Reliance Industries Ltd",
     "quantity": 10,
     "purchasePrice": 2350,
     "currentPrice": 2450.75,
-    "purchaseDate": "2025-08-10T14:46:11.294Z",
+    "purchaseDate": "2025-08-12T07:20:30.262Z",
     "sector": "Energy",
     "exchange": "NSE",
     "currentValue": 24507.5,
@@ -157,19 +145,19 @@
       "dailyChangePercentage": 1.2,
       "marketCap": "Large Cap",
       "subSector": "Oil & Gas",
-      "scrapedAt": "2025-08-10T14:46:11.292Z"
+      "scrapedAt": "2025-08-12T07:20:29.747Z"
     },
-    "createdAt": "2025-08-10T14:46:11.294Z",
-    "updatedAt": "2025-08-10T14:46:11.294Z"
+    "createdAt": "2025-08-12T07:20:30.262Z",
+    "updatedAt": "2025-08-12T07:20:30.262Z"
   },
   {
-    "accountId": "17548370995825kw1c6zvx",
+    "accountId": "1754982448621ci8ndgm05",
     "symbol": "TCS",
     "name": "Tata Consultancy Services Ltd",
     "quantity": 5,
     "purchasePrice": 3100,
     "currentPrice": 3250.4,
-    "purchaseDate": "2025-08-10T14:46:11.294Z",
+    "purchaseDate": "2025-08-12T07:20:30.263Z",
     "sector": "Information Technology",
     "exchange": "NSE",
     "currentValue": 16252,
@@ -184,63 +172,225 @@
       "dailyChangePercentage": -0.8,
       "marketCap": "Large Cap",
       "subSector": "Software",
-      "scrapedAt": "2025-08-10T14:46:11.293Z"
+      "scrapedAt": "2025-08-12T07:20:29.749Z"
     },
-    "createdAt": "2025-08-10T14:46:11.294Z",
-    "updatedAt": "2025-08-10T14:46:11.294Z"
+    "createdAt": "2025-08-12T07:20:30.263Z",
+    "updatedAt": "2025-08-12T07:20:30.263Z"
   },
   {
-    "accountId": "17548370995825kw1c6zvx",
-    "symbol": "HDFCBANK",
-    "name": "HDFC Bank Ltd",
-    "quantity": 15,
-    "purchasePrice": 1650,
-    "currentPrice": 1580.25,
-    "purchaseDate": "2025-08-10T14:46:11.294Z",
-    "sector": "Financial Services",
+    "accountId": "1754985467483ipo2scemi",
+    "symbol": "RELIANCE",
+    "name": "Reliance Industries Ltd",
+    "quantity": 10,
+    "purchasePrice": 2350,
+    "currentPrice": 2450.75,
+    "purchaseDate": "2025-08-12T07:59:16.987Z",
+    "sector": "Energy",
     "exchange": "NSE",
-    "currentValue": 23703.75,
-    "initialValue": 24750,
+    "currentValue": 24507.5,
+    "initialValue": 23500,
     "gainLoss": {
-      "absolute": -1046.25,
-      "percentage": -4.2272727272727275
+      "absolute": 1007.5,
+      "percentage": 4.287234042553192
     },
     "metadata": {
       "source": "groww",
-      "profitLossPercentage": -4.23,
-      "dailyChangePercentage": 0.5,
+      "profitLossPercentage": 4.29,
+      "dailyChangePercentage": 1.2,
       "marketCap": "Large Cap",
-      "subSector": "Private Bank",
-      "scrapedAt": "2025-08-10T14:46:11.293Z"
+      "subSector": "Oil & Gas",
+      "scrapedAt": "2025-08-12T07:59:16.465Z"
     },
-    "createdAt": "2025-08-10T14:46:11.294Z",
-    "updatedAt": "2025-08-10T14:46:11.294Z"
+    "createdAt": "2025-08-12T07:59:16.987Z",
+    "updatedAt": "2025-08-12T07:59:16.987Z"
   },
   {
-    "accountId": "17548370995825kw1c6zvx",
-    "symbol": "INFY",
-    "name": "Infosys Ltd",
-    "quantity": 8,
-    "purchasePrice": 1380,
-    "currentPrice": 1420.8,
-    "purchaseDate": "2025-08-10T14:46:11.294Z",
+    "accountId": "1754985467483ipo2scemi",
+    "symbol": "TCS",
+    "name": "Tata Consultancy Services Ltd",
+    "quantity": 5,
+    "purchasePrice": 3100,
+    "currentPrice": 3250.4,
+    "purchaseDate": "2025-08-12T07:59:16.988Z",
     "sector": "Information Technology",
     "exchange": "NSE",
-    "currentValue": 11366.4,
-    "initialValue": 11040,
+    "currentValue": 16252,
+    "initialValue": 15500,
     "gainLoss": {
-      "absolute": 326.39999999999964,
-      "percentage": 2.9565217391304315
+      "absolute": 752,
+      "percentage": 4.851612903225806
     },
     "metadata": {
       "source": "groww",
-      "profitLossPercentage": 2.96,
-      "dailyChangePercentage": 1.5,
+      "profitLossPercentage": 4.85,
+      "dailyChangePercentage": -0.8,
       "marketCap": "Large Cap",
       "subSector": "Software",
-      "scrapedAt": "2025-08-10T14:46:11.293Z"
+      "scrapedAt": "2025-08-12T07:59:16.467Z"
     },
-    "createdAt": "2025-08-10T14:46:11.294Z",
-    "updatedAt": "2025-08-10T14:46:11.294Z"
+    "createdAt": "2025-08-12T07:59:16.988Z",
+    "updatedAt": "2025-08-12T07:59:16.988Z"
+  },
+  {
+    "accountId": "17549861530486hnvy03iu",
+    "symbol": "RELIANCE",
+    "name": "Reliance Industries Ltd",
+    "quantity": 10,
+    "purchasePrice": 2350,
+    "currentPrice": 2450.75,
+    "purchaseDate": "2025-08-12T08:11:19.340Z",
+    "sector": "Energy",
+    "exchange": "NSE",
+    "currentValue": 24507.5,
+    "initialValue": 23500,
+    "gainLoss": {
+      "absolute": 1007.5,
+      "percentage": 4.287234042553192
+    },
+    "metadata": {
+      "source": "groww",
+      "profitLossPercentage": 4.29,
+      "dailyChangePercentage": 1.2,
+      "marketCap": "Large Cap",
+      "subSector": "Oil & Gas",
+      "scrapedAt": "2025-08-12T08:11:18.818Z"
+    },
+    "createdAt": "2025-08-12T08:11:19.340Z",
+    "updatedAt": "2025-08-12T08:11:19.340Z"
+  },
+  {
+    "accountId": "17549861530486hnvy03iu",
+    "symbol": "TCS",
+    "name": "Tata Consultancy Services Ltd",
+    "quantity": 5,
+    "purchasePrice": 3100,
+    "currentPrice": 3250.4,
+    "purchaseDate": "2025-08-12T08:11:19.341Z",
+    "sector": "Information Technology",
+    "exchange": "NSE",
+    "currentValue": 16252,
+    "initialValue": 15500,
+    "gainLoss": {
+      "absolute": 752,
+      "percentage": 4.851612903225806
+    },
+    "metadata": {
+      "source": "groww",
+      "profitLossPercentage": 4.85,
+      "dailyChangePercentage": -0.8,
+      "marketCap": "Large Cap",
+      "subSector": "Software",
+      "scrapedAt": "2025-08-12T08:11:18.823Z"
+    },
+    "createdAt": "2025-08-12T08:11:19.341Z",
+    "updatedAt": "2025-08-12T08:11:19.341Z"
+  },
+  {
+    "accountId": "17549860566572h5tm4af7",
+    "symbol": "RELIANCE",
+    "name": "Reliance Industries Ltd",
+    "quantity": 10,
+    "purchasePrice": 2350,
+    "currentPrice": 2450.75,
+    "purchaseDate": "2025-08-12T08:21:25.004Z",
+    "sector": "Energy",
+    "exchange": "NSE",
+    "currentValue": 24507.5,
+    "initialValue": 23500,
+    "gainLoss": {
+      "absolute": 1007.5,
+      "percentage": 4.287234042553192
+    },
+    "metadata": {
+      "source": "groww",
+      "profitLossPercentage": 4.29,
+      "dailyChangePercentage": 1.2,
+      "marketCap": "Large Cap",
+      "subSector": "Oil & Gas",
+      "scrapedAt": "2025-08-12T08:21:24.456Z"
+    },
+    "createdAt": "2025-08-12T08:21:25.004Z",
+    "updatedAt": "2025-08-12T08:21:25.004Z"
+  },
+  {
+    "accountId": "17549860566572h5tm4af7",
+    "symbol": "TCS",
+    "name": "Tata Consultancy Services Ltd",
+    "quantity": 5,
+    "purchasePrice": 3100,
+    "currentPrice": 3250.4,
+    "purchaseDate": "2025-08-12T08:21:25.005Z",
+    "sector": "Information Technology",
+    "exchange": "NSE",
+    "currentValue": 16252,
+    "initialValue": 15500,
+    "gainLoss": {
+      "absolute": 752,
+      "percentage": 4.851612903225806
+    },
+    "metadata": {
+      "source": "groww",
+      "profitLossPercentage": 4.85,
+      "dailyChangePercentage": -0.8,
+      "marketCap": "Large Cap",
+      "subSector": "Software",
+      "scrapedAt": "2025-08-12T08:21:24.458Z"
+    },
+    "createdAt": "2025-08-12T08:21:25.005Z",
+    "updatedAt": "2025-08-12T08:21:25.005Z"
+  },
+  {
+    "accountId": "1754986970137peh3w9669",
+    "symbol": "RELIANCE",
+    "name": "Reliance Industries Ltd",
+    "quantity": 10,
+    "purchasePrice": 2350,
+    "currentPrice": 2450.75,
+    "purchaseDate": "2025-08-12T08:23:50.437Z",
+    "sector": "Energy",
+    "exchange": "NSE",
+    "currentValue": 24507.5,
+    "initialValue": 23500,
+    "gainLoss": {
+      "absolute": 1007.5,
+      "percentage": 4.287234042553192
+    },
+    "metadata": {
+      "source": "groww",
+      "profitLossPercentage": 4.29,
+      "dailyChangePercentage": 1.2,
+      "marketCap": "Large Cap",
+      "subSector": "Oil & Gas",
+      "scrapedAt": "2025-08-12T08:23:49.928Z"
+    },
+    "createdAt": "2025-08-12T08:23:50.437Z",
+    "updatedAt": "2025-08-12T08:23:50.437Z"
+  },
+  {
+    "accountId": "1754986970137peh3w9669",
+    "symbol": "TCS",
+    "name": "Tata Consultancy Services Ltd",
+    "quantity": 5,
+    "purchasePrice": 3100,
+    "currentPrice": 3250.4,
+    "purchaseDate": "2025-08-12T08:23:50.438Z",
+    "sector": "Information Technology",
+    "exchange": "NSE",
+    "currentValue": 16252,
+    "initialValue": 15500,
+    "gainLoss": {
+      "absolute": 752,
+      "percentage": 4.851612903225806
+    },
+    "metadata": {
+      "source": "groww",
+      "profitLossPercentage": 4.85,
+      "dailyChangePercentage": -0.8,
+      "marketCap": "Large Cap",
+      "subSector": "Software",
+      "scrapedAt": "2025-08-12T08:23:49.928Z"
+    },
+    "createdAt": "2025-08-12T08:23:50.438Z",
+    "updatedAt": "2025-08-12T08:23:50.438Z"
   }
 ]
