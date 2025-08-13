@@ -6,6 +6,7 @@ const accountRoutes = require('./accountRoutes');
 const stockRoutes = require('./stockRoutes');
 const portfolioRoutes = require('./portfolioRoutes');
 const csvRoutes = require('./csvRoutes');
+const scrapingRoutes = require('./scrapingRoutes');
 
 // Health check endpoint
 router.get('/health', (req, res) => {
@@ -22,5 +23,6 @@ router.use('/api', accountRoutes);
 router.use('/api', stockRoutes);
 router.use('/api', portfolioRoutes);
 router.use('/api/csv', csvRoutes);
+router.use('/api', scrapingRoutes);
 
 module.exports = router;

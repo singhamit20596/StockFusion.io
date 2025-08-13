@@ -207,5 +207,240 @@
       "lastSyncStatus": "failed",
       "lastSyncError": "User not logged in or session expired"
     }
+  },
+  {
+    "id": "1755054173372k1pijrhve",
+    "name": "5",
+    "type": "investment",
+    "balance": 0,
+    "currency": "USD",
+    "description": "",
+    "isActive": true,
+    "createdAt": "2025-08-13T03:02:53.372Z",
+    "updatedAt": "2025-08-13T03:02:53.372Z"
+  },
+  {
+    "id": "1755054207617nhobvx3b4",
+    "name": "5",
+    "type": "investment",
+    "balance": 0,
+    "currency": "USD",
+    "description": "",
+    "isActive": true,
+    "createdAt": "2025-08-13T03:03:27.617Z",
+    "updatedAt": "2025-08-13T03:11:27.904Z",
+    "metadata": {
+      "lastSyncAt": "2025-08-13T03:11:27.904Z",
+      "lastSyncStatus": "failed",
+      "lastSyncError": "User not logged in or session expired"
+    }
+  },
+  {
+    "id": "17550544036678nw1xaax1",
+    "name": "6",
+    "type": "investment",
+    "balance": 0,
+    "currency": "USD",
+    "description": "",
+    "isActive": true,
+    "createdAt": "2025-08-13T03:06:43.667Z",
+    "updatedAt": "2025-08-13T03:06:59.605Z",
+    "metadata": {
+      "lastSyncAt": "2025-08-13T03:06:59.605Z",
+      "lastSyncStatus": "failed",
+      "lastSyncError": "User not logged in or session expired"
+    }
+  },
+  {
+    "id": "1755054767869t45303dy2",
+    "name": "7",
+    "type": "investment",
+    "balance": 0,
+    "currency": "USD",
+    "description": "",
+    "isActive": true,
+    "createdAt": "2025-08-13T03:12:47.869Z",
+    "updatedAt": "2025-08-13T03:13:08.666Z",
+    "metadata": {
+      "lastSyncAt": "2025-08-13T03:13:08.666Z",
+      "lastSyncStatus": "failed",
+      "lastSyncError": "User not logged in or session expired"
+    }
+  },
+  {
+    "id": "17550552067315ubz5de4t",
+    "name": "8",
+    "type": "investment",
+    "balance": 0,
+    "currency": "USD",
+    "description": "",
+    "isActive": true,
+    "createdAt": "2025-08-13T03:20:06.731Z",
+    "updatedAt": "2025-08-13T03:20:06.730Z"
+  },
+  {
+    "id": "1755055210515c29btb3oz",
+    "name": "8",
+    "type": "investment",
+    "balance": 0,
+    "currency": "USD",
+    "description": "",
+    "isActive": true,
+    "createdAt": "2025-08-13T03:20:10.515Z",
+    "updatedAt": "2025-08-13T03:20:10.513Z"
+  },
+  {
+    "id": "1755055212190jx65pxis7",
+    "name": "8",
+    "type": "investment",
+    "balance": 0,
+    "currency": "USD",
+    "description": "",
+    "isActive": true,
+    "createdAt": "2025-08-13T03:20:12.190Z",
+    "updatedAt": "2025-08-13T03:20:12.190Z"
+  },
+  {
+    "id": "1755055260279sj1n0a62m",
+    "name": "8",
+    "type": "investment",
+    "balance": 0,
+    "currency": "USD",
+    "description": "",
+    "isActive": true,
+    "createdAt": "2025-08-13T03:21:00.279Z",
+    "updatedAt": "2025-08-13T03:21:00.278Z"
+  },
+  {
+    "id": "1755055452001rtsc0zvno",
+    "name": "9",
+    "type": "investment",
+    "balance": 0,
+    "currency": "USD",
+    "description": "",
+    "isActive": true,
+    "createdAt": "2025-08-13T03:24:12.001Z",
+    "updatedAt": "2025-08-13T03:24:11.999Z"
+  },
+  {
+    "id": "1755055519629bp0w5a12k",
+    "name": "9",
+    "type": "investment",
+    "balance": 0,
+    "currency": "USD",
+    "description": "",
+    "isActive": true,
+    "createdAt": "2025-08-13T03:25:19.629Z",
+    "updatedAt": "2025-08-13T03:25:19.626Z"
+  },
+  {
+    "id": "1755055533383zyq28igu1",
+    "name": "10",
+    "type": "investment",
+    "balance": 0,
+    "currency": "USD",
+    "description": "",
+    "isActive": true,
+    "createdAt": "2025-08-13T03:25:33.383Z",
+    "updatedAt": "2025-08-13T03:25:33.383Z"
+  },
+  {
+    "id": "1755056083151n1xvwjm6w",
+    "name": "11",
+    "type": "investment",
+    "balance": 0,
+    "currency": "USD",
+    "description": "",
+    "isActive": true,
+    "createdAt": "2025-08-13T03:34:43.151Z",
+    "updatedAt": "2025-08-13T03:34:43.150Z"
+  },
+  {
+    "id": "1755057380857m5dbhpx6w",
+    "name": "12",
+    "type": "investment",
+    "balance": 0,
+    "currency": "USD",
+    "description": "",
+    "isActive": true,
+    "createdAt": "2025-08-13T03:56:20.857Z",
+    "updatedAt": "2025-08-13T03:56:20.857Z"
+  },
+  {
+    "id": "1755057389669qlols5r6v",
+    "name": "12",
+    "type": "investment",
+    "balance": 0,
+    "currency": "USD",
+    "description": "",
+    "isActive": true,
+    "createdAt": "2025-08-13T03:56:29.669Z",
+    "updatedAt": "2025-08-13T03:56:29.668Z"
+  },
+  {
+    "id": "1755057391069kwgg17m8t",
+    "name": "12",
+    "type": "investment",
+    "balance": 0,
+    "currency": "USD",
+    "description": "",
+    "isActive": true,
+    "createdAt": "2025-08-13T03:56:31.069Z",
+    "updatedAt": "2025-08-13T03:56:31.067Z"
+  },
+  {
+    "id": "17550574027728ipecytsn",
+    "name": "12",
+    "type": "investment",
+    "balance": 0,
+    "currency": "USD",
+    "description": "",
+    "isActive": true,
+    "createdAt": "2025-08-13T03:56:42.772Z",
+    "updatedAt": "2025-08-13T03:56:42.771Z"
+  },
+  {
+    "id": "1755095045450ap99pus9e",
+    "name": "15",
+    "type": "investment",
+    "balance": 125000,
+    "currency": "USD",
+    "description": "",
+    "isActive": true,
+    "createdAt": "2025-08-13T14:24:05.450Z",
+    "updatedAt": "2025-08-13T14:24:05.449Z"
+  },
+  {
+    "id": "17550950770630benrhqi1",
+    "name": "16",
+    "type": "investment",
+    "balance": 125000,
+    "currency": "USD",
+    "description": "",
+    "isActive": true,
+    "createdAt": "2025-08-13T14:24:37.063Z",
+    "updatedAt": "2025-08-13T14:24:37.062Z"
+  },
+  {
+    "id": "1755095121722gmbdce925",
+    "name": "14",
+    "type": "investment",
+    "balance": 125000,
+    "currency": "USD",
+    "description": "",
+    "isActive": true,
+    "createdAt": "2025-08-13T14:25:21.722Z",
+    "updatedAt": "2025-08-13T14:25:21.721Z"
+  },
+  {
+    "id": "1755097426172r128zyllp",
+    "name": "78",
+    "type": "investment",
+    "balance": 125000,
+    "currency": "USD",
+    "description": "",
+    "isActive": true,
+    "createdAt": "2025-08-13T15:03:46.172Z",
+    "updatedAt": "2025-08-13T15:03:46.171Z"
   }
 ]

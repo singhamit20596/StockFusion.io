@@ -450,6 +450,56 @@ class ScrapingService {
       throw error;
     }
   }
+
+  /**
+   * Simplified scraping method for testing - no account management
+   * Just opens Groww, asks user to login, and scrapes portfolio data
+   */
+  async scrapeGrowwRealtime(options = {}) {
+    const sessionId = options.sessionId || `test-${Date.now()}`;
+    const onProgress = options.onProgress || (() => {});
+    
+    console.log(`🚀 Starting simplified Groww scraping test`);
+    console.log(`📊 Session ID: ${sessionId}`);
+
+    // Validate real scraper availability
+    if (!this.realScraper) {
+      const error = 'Real scraper not available. Install Puppeteer: npm run install-scraping';
+      console.error('❌', error);
+      throw new Error(error);
+    }
+
+    try {
+      console.log(`🎯 Starting automated scraping (test mode)`);
+      
+      // Create a progress callback wrapper
+      const progressCallback = (progress) => {
+        console.log(`📊 Progress: ${JSON.stringify(progress)}`);
+        onProgress(progress);
+      };
+      
+      // Perform complete automated scraping with progress tracking
+      const scrapingResult = await this.realScraper.performAutomatedScraping(progressCallback);
+      
+      if (!scrapingResult.success) {
+        throw new Error(scrapingResult.message);
+      }
+
+      console.log(`📊 Raw data scraped: ${scrapingResult.data.holdings.length} holdings`);
+
+      // Return the complete scraped data structure
+      return {
+        success: true,
+        message: `Successfully scraped ${scrapingResult.data.holdings.length} holdings from Groww`,
+        sessionId: sessionId,
+        data: scrapingResult.data  // This already contains holdings, portfolioSummary, etc.
+      };
+
+    } catch (error) {
+      console.error(`❌ Simplified scraping failed:`, error);
+      throw error;
+    }
+  }
 }
 
 module.exports = new ScrapingService();

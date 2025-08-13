@@ -8,6 +8,7 @@ import AddAccount from './components/AddAccount';
 import PortfolioBuilder from './components/PortfolioBuilder';
 import CSVOperations from './components/CSVOperations';
 import GrowwCallback from './components/GrowwCallback';
+import ScrapingTest from './components/ScrapingTest';
 
 const theme = createTheme({
   palette: {
@@ -89,6 +90,8 @@ function MainAppRoutes({ layoutKey, dashboardKey, onDataRefresh, onAccountCreate
         return <PortfolioBuilder />;
       case 'csv-operations':
         return <CSVOperations />;
+      case 'scraping-test':
+        return <ScrapingTest />;
       default:
         return <Dashboard key={dashboardKey} />;
     }

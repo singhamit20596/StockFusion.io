@@ -200,6 +200,7 @@ export default function Layout({ children, currentPage, onPageChange, onDataRefr
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: <Dashboard /> },
     { id: 'add-account', label: 'Add Account', icon: <Add /> },
+    { id: 'scraping-test', label: 'Real-time Scraping', icon: <TrendingUp /> },
     { id: 'portfolio-builder', label: 'Portfolio Builder', icon: <TrendingUp /> },
     { id: 'csv-operations', label: 'CSV Import/Export', icon: <ImportExport /> },
   ];

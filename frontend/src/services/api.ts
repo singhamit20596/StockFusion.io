@@ -1,12 +1,22 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5002/api';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },
+  timeout: 30000, // 30 seconds default timeout
+});
+
+// Create a separate instance for long-running operations like sync
+const syncApi = axios.create({
+  baseURL: API_BASE_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  timeout: 600000, // 10 minutes timeout for sync operations
 });
 
 // Types
@@ -96,7 +106,7 @@ export interface SyncStatus {
 
 // API Functions
 
-// Health
+// API Health
 export const getHealth = () => api.get('/health');
 
 // Accounts
@@ -107,11 +117,11 @@ export const updateAccount = (id: string, account: Partial<Account>) => api.put<
 export const deleteAccount = (id: string) => api.delete(`/api/accounts/${id}`);
 export const getAccountSummary = (id: string) => api.get(`/api/accounts/${id}/summary`);
 
-// Groww Integration
+// Groww Integration (using longer timeout)
 export const syncWithGroww = (accountId: string, credentials: SyncCredentials) =>
-  api.post<SyncResponse>(`/api/accounts/${accountId}/sync`, credentials);
+  syncApi.post<SyncResponse>(`/api/accounts/${accountId}/sync`, credentials);
 export const syncAccount = (accountId: string, options?: { automated?: boolean }) =>
-  api.post<SyncResponse>(`/api/accounts/${accountId}/sync`, options || {});
+  syncApi.post<SyncResponse>(`/api/accounts/${accountId}/sync`, options || {});
 export const getSyncStatus = (accountId: string) =>
   api.get<{ success: boolean; data: SyncStatus }>(`/api/accounts/${accountId}/sync/status`);
 export const clearSyncData = (accountId: string) =>

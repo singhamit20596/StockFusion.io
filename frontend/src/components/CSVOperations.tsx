@@ -78,7 +78,7 @@ const CSVOperations: React.FC = () => {
   const [importResult, setImportResult] = useState<ImportResult | null>(null);
   const [alert, setAlert] = useState<{ type: 'success' | 'error' | 'info'; message: string } | null>(null);
 
-  const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001';
+  const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5002';
 
   const showAlert = (type: 'success' | 'error' | 'info', message: string) => {
     setAlert({ type, message });

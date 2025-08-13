@@ -115,17 +115,6 @@ export default function AddAccount({ onAccountCreated }: AddAccountProps = {}) {
         throw new Error('Account name is required');
       }
 
-      // First test connectivity to backend
-      console.log('🔗 Testing backend connectivity...');
-      try {
-        const testResponse = await fetch(`${API_BASE_URL}/health`);
-        const testData = await testResponse.json();
-        console.log('✅ Backend connectivity test:', testData);
-      } catch (connectError) {
-        console.error('❌ Backend connectivity failed:', connectError);
-        throw new Error('Cannot connect to backend server. Please check if the server is running.');
-      }
-
       // Check if account name already exists
       const exists = await checkAccountExists(accountData.name.trim());
       if (exists) {
@@ -162,19 +151,6 @@ export default function AddAccount({ onAccountCreated }: AddAccountProps = {}) {
         timeout: 600000, // 10 minutes
       });
 
-      console.log('🔗 Making API call to:', API_BASE_URL + '/api/accounts/sync-groww');
-      console.log('📤 Request payload:', { accountName: accountData.name });
-
-      // Test simple GET request first
-      try {
-        console.log('🧪 Testing simple GET request...');
-        const healthCheck = await axios.get(`${API_BASE_URL}/health`);
-        console.log('✅ Health check passed:', healthCheck.data);
-      } catch (healthError) {
-        console.error('❌ Health check failed:', healthError);
-        throw new Error('Backend server is not reachable');
-      }
-
       setScrapingProgress({
         percentage: 30,
         message: 'Browser opening...',
@@ -184,8 +160,6 @@ export default function AddAccount({ onAccountCreated }: AddAccountProps = {}) {
       const response = await syncApiClient.post('/api/accounts/sync-groww', {
         accountName: accountData.name // Pass the account name for creation after sync
       });
-
-      console.log('✅ Sync API response:', response.data);
 
       if (response.data.success) {
         setSyncResults(response.data.data);
@@ -203,14 +177,6 @@ export default function AddAccount({ onAccountCreated }: AddAccountProps = {}) {
       }
 
     } catch (err: any) {
-      console.error('❌ Groww sync error:', err);
-      console.error('❌ Error details:', {
-        message: err.message,
-        response: err.response?.data,
-        status: err.response?.status,
-        config: err.config
-      });
-      
       setScrapingProgress({
         percentage: 0,
         message: '',
@@ -237,10 +203,11 @@ export default function AddAccount({ onAccountCreated }: AddAccountProps = {}) {
       });
 
       setSuccess('🎉 Account created successfully with portfolio data!');
-      handleNext(); // Move to confirmation step
+      handleNext();
       
-      // Don't automatically trigger callback - let user choose when to navigate
-      
+      if (onAccountCreated) {
+        onAccountCreated();
+      }
     } catch (err: any) {
       setError('Sync successful but failed to create account: ' + (err.response?.data?.message || err.message));
     }
@@ -465,32 +432,12 @@ export default function AddAccount({ onAccountCreated }: AddAccountProps = {}) {
 
                 <Box sx={{ mt: 2 }}>
                   {index === steps.length - 1 ? (
-                    <Box>
-                      <Button
-                        variant="contained"
-                        onClick={() => {
-                          // Reset the form for another account
-                          setActiveStep(0);
-                          setAccountData({ name: '', brokerType: '' });
-                          setSyncResults(null);
-                          setError(null);
-                          setSuccess(null);
-                        }}
-                        sx={{ mr: 1 }}
-                      >
-                        Create Another Account
-                      </Button>
-                      <Button
-                        variant="outlined"
-                        onClick={() => {
-                          if (onAccountCreated) {
-                            onAccountCreated();
-                          }
-                        }}
-                      >
-                        Go to Dashboard
-                      </Button>
-                    </Box>
+                    <Button
+                      variant="contained"
+                      onClick={() => window.location.reload()}
+                    >
+                      Create Another Account
+                    </Button>
                   ) : (
                     <Box>
                       <Button
