@@ -237,6 +237,61 @@ class AccountController {
   }
 
   /**
+   * Get account holdings/stocks
+   * GET /api/accounts/:id/holdings
+   */
+  async getAccountHoldings(req, res) {
+    try {
+      const { id } = req.params;
+      const account = await fileService.findById('accounts.json', id);
+      
+      if (!account) {
+        return res.status(404).json({
+          success: false,
+          message: 'Account not found'
+        });
+      }
+
+      // Get stocks for this account
+      const stocks = await fileService.findBy('stocks.json', { accountId: id });
+      
+      // Calculate portfolio summary
+      let totalValue = 0;
+      let totalInvestment = 0;
+      let totalProfitLoss = 0;
+      
+      stocks.forEach(stock => {
+        totalValue += parseFloat(stock.currentValue) || 0;
+        totalInvestment += parseFloat(stock.investment) || 0;
+        totalProfitLoss += parseFloat(stock.pnl) || 0;
+      });
+
+      const summary = {
+        totalStocks: stocks.length,
+        totalValue,
+        totalInvestment,
+        totalProfitLoss,
+        totalProfitLossPercentage: totalInvestment > 0 ? (totalProfitLoss / totalInvestment) * 100 : 0
+      };
+
+      res.json({
+        success: true,
+        data: {
+          account,
+          stocks,
+          summary
+        }
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: 'Error fetching account holdings',
+        error: error.message
+      });
+    }
+  }
+
+  /**
    * Sync account with Groww platform - REAL-TIME IMPLEMENTATION ONLY
    * POST /api/accounts/:id/sync
    */
@@ -588,36 +643,40 @@ class AccountController {
       console.log(`🤖 Using REAL-TIME automated sync for new account: ${accountName}`);
       
       try {
-        // For now, simulate the sync process 
-        // TODO: Integrate with real scraping service once backend changes are stable
-        
-        // Mock successful sync data for testing
-        const mockSyncData = {
-          summary: {
-            totalStocks: 5,
-            totalValue: 125000,
-            totalInvestment: 100000,
-            totalProfitLoss: 25000,
-            syncedAt: new Date().toISOString()
-          },
-          holdings: [
-            { symbol: 'RELIANCE', name: 'Reliance Industries', quantity: 10, currentPrice: 2500 },
-            { symbol: 'TCS', name: 'Tata Consultancy Services', quantity: 5, currentPrice: 3200 },
-            { symbol: 'HDFCBANK', name: 'HDFC Bank', quantity: 8, currentPrice: 1600 },
-            { symbol: 'INFY', name: 'Infosys', quantity: 12, currentPrice: 1400 },
-            { symbol: 'ITC', name: 'ITC Limited', quantity: 20, currentPrice: 450 }
-          ]
-        };
+        // Create the account first
+        const newAccount = new Account({
+          name: accountName,
+          type: 'investment',
+          balance: 0,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        });
 
-        // Return mock sync results for account creation
+        const savedAccount = await fileService.addItem('accounts.json', newAccount.toJSON());
+        
+        console.log(`✅ Account created: ${savedAccount.name} (ID: ${savedAccount.id})`);
+
+        // Now perform real-time scraping for this account
+        const syncResult = await scrapingService.syncGrowwAccountRealTime(savedAccount.id, {
+          sessionId: `new-account-${Date.now()}`
+        });
+
+        if (!syncResult.success) {
+          throw new Error(syncResult.message || 'Scraping failed');
+        }
+
+        console.log(`✅ Real scraping completed for account: ${savedAccount.name}`);
+
+        // Return real sync results
         res.json({
           success: true,
-          message: 'Groww sync completed successfully',
+          message: 'Account created and synced successfully with real data',
           data: {
-            accountName: accountName,
-            holdings: mockSyncData.holdings,
-            summary: mockSyncData.summary,
-            isMockData: true
+            account: syncResult.data.account,
+            holdings: syncResult.data.stocks,
+            summary: syncResult.data.summary,
+            isRealTime: true,
+            isMockData: false
           }
         });
 

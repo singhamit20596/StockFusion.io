@@ -20,7 +20,7 @@ import {
   ArcElement,
 } from 'chart.js';
 import { Doughnut, Bar } from 'react-chartjs-2';
-import { Stock, getStocks, getAccounts } from '../services/api';
+import { Stock, getStocks, getAccounts, getAccountHoldings } from '../services/api';
 import { TrendingUp, TrendingDown, AccountBalance, ShowChart } from '@mui/icons-material';
 
 ChartJS.register(
@@ -57,7 +57,7 @@ interface MarketCapData {
   };
 }
 
-export default function Dashboard() {
+export default function Dashboard({ selectedAccountId }: { selectedAccountId?: string }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [stocks, setStocks] = useState<Stock[]>([]);
@@ -70,37 +70,70 @@ export default function Dashboard() {
     profitLossPercentage: 0,
   });
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   const fetchData = async () => {
     try {
       setLoading(true);
-      const [stocksResponse, accountsResponse] = await Promise.all([
-        getStocks(),
-        getAccounts(),
-      ]);
+      
+      if (selectedAccountId) {
+        // Fetch data for specific account
+        const [holdingsResponse, accountsResponse] = await Promise.all([
+          getAccountHoldings(selectedAccountId),
+          getAccounts(),
+        ]);
 
-      const stocksData = stocksResponse.data.data;
-      const accountsData = accountsResponse.data.data;
+        const holdingsData = holdingsResponse.data.data;
+        const accountsData = accountsResponse.data.data;
 
-      setStocks(stocksData);
+        // Convert holdings format to stocks format for compatibility
+        const stocksData = holdingsData.stocks.map((stock: any) => ({
+          ...stock,
+          currentValue: stock.currentValue || (stock.quantity * stock.currentPrice),
+          initialValue: stock.investment || (stock.quantity * stock.avgPrice),
+          gainLoss: {
+            absolute: stock.pnl || 0,
+            percentage: stock.pnlPercentage || 0
+          }
+        }));
 
-      // Calculate stats
-      const totalValue = stocksData.reduce((sum: number, stock: Stock) => sum + stock.currentValue, 0);
-      const totalInvestment = stocksData.reduce((sum: number, stock: Stock) => sum + stock.initialValue, 0);
-      const totalProfitLoss = totalValue - totalInvestment;
-      const profitLossPercentage = totalInvestment > 0 ? (totalProfitLoss / totalInvestment) * 100 : 0;
+        setStocks(stocksData);
 
-      setStats({
-        totalValue,
-        totalInvestment,
-        totalProfitLoss,
-        totalStocks: stocksData.length,
-        totalAccounts: accountsData.length,
-        profitLossPercentage,
-      });
+        // Use summary from backend if available, otherwise calculate
+        const summary = holdingsData.summary;
+        setStats({
+          totalValue: summary.totalValue,
+          totalInvestment: summary.totalInvestment,
+          totalProfitLoss: summary.totalProfitLoss,
+          totalStocks: summary.totalStocks,
+          totalAccounts: accountsData.length,
+          profitLossPercentage: summary.totalProfitLossPercentage,
+        });
+      } else {
+        // Fetch all data (original behavior)
+        const [stocksResponse, accountsResponse] = await Promise.all([
+          getStocks(),
+          getAccounts(),
+        ]);
+
+        const stocksData = stocksResponse.data.data;
+        const accountsData = accountsResponse.data.data;
+
+        setStocks(stocksData);
+
+        // Calculate stats
+        const totalValue = stocksData.reduce((sum: number, stock: Stock) => sum + stock.currentValue, 0);
+        const totalInvestment = stocksData.reduce((sum: number, stock: Stock) => sum + stock.initialValue, 0);
+        const totalProfitLoss = totalValue - totalInvestment;
+        const profitLossPercentage = totalInvestment > 0 ? (totalProfitLoss / totalInvestment) * 100 : 0;
+
+        setStats({
+          totalValue,
+          totalInvestment,
+          totalProfitLoss,
+          totalStocks: stocksData.length,
+          totalAccounts: accountsData.length,
+          profitLossPercentage,
+        });
+      }
     } catch (err) {
       setError('Failed to fetch dashboard data');
       console.error('Error fetching dashboard data:', err);
@@ -108,6 +141,10 @@ export default function Dashboard() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchData();
+  }, [selectedAccountId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-IN', {

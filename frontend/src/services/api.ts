@@ -116,6 +116,9 @@ export const createAccount = (account: Omit<Account, 'id'>) => api.post<{success
 export const updateAccount = (id: string, account: Partial<Account>) => api.put<{success: boolean; data: Account}>(`/api/accounts/${id}`, account);
 export const deleteAccount = (id: string) => api.delete(`/api/accounts/${id}`);
 export const getAccountSummary = (id: string) => api.get(`/api/accounts/${id}/summary`);
+export const getAccountHoldings = (id: string) => api.get(`/api/accounts/${id}/holdings`);
+
+// Sync operations
 
 // Groww Integration (using longer timeout)
 export const syncWithGroww = (accountId: string, credentials: SyncCredentials) =>

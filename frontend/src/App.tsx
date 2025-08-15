@@ -5,6 +5,8 @@ import { CssBaseline, Box } from '@mui/material';
 import Layout from './components/Layout';
 import Dashboard from './components/Dashboard';
 import AddAccount from './components/AddAccount';
+import AccountDetails from './components/AccountDetails';
+import HoldingsTable from './components/HoldingsTable';
 import PortfolioBuilder from './components/PortfolioBuilder';
 import CSVOperations from './components/CSVOperations';
 import GrowwCallback from './components/GrowwCallback';
@@ -79,13 +81,45 @@ function MainAppRoutes({ layoutKey, dashboardKey, onDataRefresh, onAccountCreate
   onAccountCreated: () => void;
 }) {
   const [currentPage, setCurrentPage] = useState('dashboard');
+  const [selectedAccountId, setSelectedAccountId] = useState<string | undefined>();
+  const [selectedAccountName, setSelectedAccountName] = useState<string>('');
+
+  const handleAccountSelect = (accountId: string, accountName?: string) => {
+    setSelectedAccountId(accountId);
+    setSelectedAccountName(accountName || '');
+    setCurrentPage('account-holdings');
+  };
 
   const renderCurrentPage = () => {
     switch (currentPage) {
       case 'dashboard':
-        return <Dashboard key={dashboardKey} />;
+        return <Dashboard key={dashboardKey} selectedAccountId={selectedAccountId} />;
       case 'add-account':
-        return <AddAccount onAccountCreated={onAccountCreated} />;
+        return <AddAccount 
+          onAccountCreated={onAccountCreated} 
+          onShowAccountDetails={(accountId) => {
+            setSelectedAccountId(accountId);
+            setCurrentPage('account-details');
+          }}
+        />;
+      case 'account-details':
+        return selectedAccountId ? (
+          <AccountDetails 
+            accountId={selectedAccountId} 
+            onBack={() => setCurrentPage('dashboard')}
+          />
+        ) : (
+          <Dashboard key={dashboardKey} selectedAccountId={selectedAccountId} />
+        );
+      case 'account-holdings':
+        return selectedAccountId ? (
+          <HoldingsTable 
+            accountId={selectedAccountId}
+            accountName={selectedAccountName}
+          />
+        ) : (
+          <Dashboard key={dashboardKey} selectedAccountId={selectedAccountId} />
+        );
       case 'portfolio-builder':
         return <PortfolioBuilder />;
       case 'csv-operations':
@@ -93,7 +127,7 @@ function MainAppRoutes({ layoutKey, dashboardKey, onDataRefresh, onAccountCreate
       case 'scraping-test':
         return <ScrapingTest />;
       default:
-        return <Dashboard key={dashboardKey} />;
+        return <Dashboard key={dashboardKey} selectedAccountId={selectedAccountId} />;
     }
   };
 
@@ -103,6 +137,8 @@ function MainAppRoutes({ layoutKey, dashboardKey, onDataRefresh, onAccountCreate
       currentPage={currentPage} 
       onPageChange={setCurrentPage}
       onDataRefresh={onDataRefresh}
+      selectedAccountId={selectedAccountId}
+      onAccountSelect={handleAccountSelect}
     >
       {renderCurrentPage()}
     </Layout>

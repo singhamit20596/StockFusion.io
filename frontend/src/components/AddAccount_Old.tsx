@@ -44,13 +44,15 @@ const brokerTypes = [
   { value: 'manual', label: 'Manual Entry', icon: '✍️' },
 ];
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5002';
 
 export default function AddAccount({ onAccountCreated }: AddAccountProps = {}) {
   const [activeStep, setActiveStep] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  
+  // Progress tracking for real-time scraping
   const [scrapingProgress, setScrapingProgress] = useState<{
     percentage: number;
     message: string;
@@ -60,10 +62,12 @@ export default function AddAccount({ onAccountCreated }: AddAccountProps = {}) {
     message: '',
     isActive: false
   });
+
   const [accountData, setAccountData] = useState<AccountFormData>({
     name: '',
     brokerType: '',
   });
+
   const [syncResults, setSyncResults] = useState<any>(null);
 
   const steps = [
@@ -79,7 +83,18 @@ export default function AddAccount({ onAccountCreated }: AddAccountProps = {}) {
     setAccountData({ ...accountData, [field]: event.target.value });
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
+    // If moving from step 3 (portfolio review) to step 4 (confirmation), create the account
+    if (activeStep === 3 && syncResults) {
+      try {
+        await createAccountWithSyncData(syncResults);
+      } catch (err: any) {
+        console.error('❌ Account creation failed:', err);
+        setError('Failed to create account: ' + (err.response?.data?.message || err.message));
+        return; // Don't advance step if account creation fails
+      }
+    }
+    
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     setError(null);
   };
@@ -106,13 +121,28 @@ export default function AddAccount({ onAccountCreated }: AddAccountProps = {}) {
     try {
       setLoading(true);
       setError(null);
+      
       if (!accountData.name.trim()) {
         throw new Error('Account name is required');
       }
+
+      // First test connectivity to backend
+      console.log('🔗 Testing backend connectivity...');
+      try {
+        const testResponse = await fetch(`${API_BASE_URL}/health`);
+        const testData = await testResponse.json();
+        console.log('✅ Backend connectivity test:', testData);
+      } catch (connectError) {
+        console.error('❌ Backend connectivity failed:', connectError);
+        throw new Error('Cannot connect to backend server. Please check if the server is running.');
+      }
+
+      // Check if account name already exists
       const exists = await checkAccountExists(accountData.name.trim());
       if (exists) {
         throw new Error(`Account with name "${accountData.name}" already exists. Please choose a different name.`);
       }
+
       setSuccess('✅ Account name is available!');
       handleNext();
     } catch (err: any) {
@@ -127,73 +157,71 @@ export default function AddAccount({ onAccountCreated }: AddAccountProps = {}) {
       setLoading(true);
       setError(null);
       setSuccess(null);
-      
-      // Initial progress
+
+      // Start the scraping process with progress tracking
       setScrapingProgress({
-        percentage: 5,
-        message: 'Initializing Groww sync...',
+        percentage: 10,
+        message: 'Starting Groww sync...',
         isActive: true
       });
-      
-      setSuccess('🚀 Starting automated portfolio sync...\n\n� A secure browser window will open for Groww login\n⏳ Please complete login within 10 minutes');
-      
+
+      setSuccess('🌐 Opening Chrome browser for Groww login...\n\n👆 A new browser window will open automatically\n🔐 Please log in to your Groww account in that window');
+
+      // Call backend to start automated scraping
       const syncApiClient = axios.create({
         baseURL: API_BASE_URL,
         timeout: 600000, // 10 minutes
       });
-      
-      // Update progress - browser opening
+
+      console.log('🔗 Making API call to:', API_BASE_URL + '/api/accounts/sync-groww');
+      console.log('📤 Request payload:', { accountName: accountData.name });
+
+      // Test simple GET request first
+      try {
+        console.log('🧪 Testing simple GET request...');
+        const healthCheck = await axios.get(`${API_BASE_URL}/health`);
+        console.log('✅ Health check passed:', healthCheck.data);
+      } catch (healthError) {
+        console.error('❌ Health check failed:', healthError);
+        throw new Error('Backend server is not reachable');
+      }
+
       setScrapingProgress({
-        percentage: 15,
-        message: 'Opening secure browser for Groww login...',
+        percentage: 30,
+        message: 'Browser opening...',
         isActive: true
       });
-      
-      // Wait a moment for user to see the message
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Update progress - starting scrape
-      setScrapingProgress({
-        percentage: 25,
-        message: 'Waiting for your login...',
-        isActive: true
-      });
-      
+
       const response = await syncApiClient.post('/api/accounts/sync-groww', {
         accountName: accountData.name // Pass the account name for creation after sync
       });
-      
+
+      console.log('✅ Sync API response:', response.data);
+
       if (response.data.success) {
-        // Update progress - data received
-        setScrapingProgress({
-          percentage: 85,
-          message: 'Processing portfolio data...',
-          isActive: true
-        });
-        
         setSyncResults(response.data.data);
-        
-        // Update progress - creating account
-        setScrapingProgress({
-          percentage: 95,
-          message: 'Creating account with portfolio data...',
-          isActive: true
-        });
-        
-        await createAccountWithSyncData(response.data.data);
-        
-        // Complete
         setScrapingProgress({
           percentage: 100,
-          message: 'Sync completed successfully! 🎉',
+          message: 'Sync completed successfully!',
           isActive: false
         });
+        setSuccess('✅ Portfolio synced successfully! Review your holdings below.');
         
-        setSuccess('✅ Portfolio synced and account created successfully!');
+        // Move to next step to show the portfolio data
+        handleNext();
       } else {
         throw new Error(response.data.message || 'Sync failed');
       }
+
     } catch (err: any) {
+      console.error('❌ Groww sync error:', err);
+      console.error('❌ Error details:', {
+        message: err.message,
+        response: err.response?.data,
+        status: err.response?.status,
+        config: err.config
+      });
+      
       setScrapingProgress({
         percentage: 0,
         message: '',
@@ -201,11 +229,9 @@ export default function AddAccount({ onAccountCreated }: AddAccountProps = {}) {
       });
       
       if (err.code === 'ECONNABORTED' || err.message.includes('timeout')) {
-        setError('⏰ Sync timed out. Please ensure you log in to Groww within 10 minutes and try again.');
-      } else if (err.response?.status === 404) {
-        setError('🔧 Backend service not available. Please ensure the backend server is running.');
+        setError('Sync timed out. Please ensure you log in to Groww within 10 minutes and try again.');
       } else {
-        setError(`❌ ${err.response?.data?.message || err.message || 'Failed to sync with Groww'}`);
+        setError(err.response?.data?.message || err.message || 'Failed to sync with Groww');
       }
     } finally {
       setLoading(false);
@@ -214,15 +240,19 @@ export default function AddAccount({ onAccountCreated }: AddAccountProps = {}) {
 
   const createAccountWithSyncData = async (syncData: any) => {
     try {
-      // Account is already created by the backend, just show success and move to next step
-      setSyncResults(syncData);
+      // Create account with synced portfolio data
+      const accountResponse = await createAccount({
+        name: accountData.name,
+        type: 'investment',
+        balance: syncData.summary?.totalValue || 0
+      });
+
       setSuccess('🎉 Account created successfully with portfolio data!');
-      handleNext();
-      if (onAccountCreated) {
-        onAccountCreated();
-      }
+      
+      // Account creation successful - will advance to confirmation step automatically
+      
     } catch (err: any) {
-      setError('Failed to process sync data: ' + (err.response?.data?.message || err.message));
+      setError('Sync successful but failed to create account: ' + (err.response?.data?.message || err.message));
     }
   };
 
@@ -255,6 +285,7 @@ export default function AddAccount({ onAccountCreated }: AddAccountProps = {}) {
             />
           </Box>
         );
+
       case 1:
         return (
           <Box sx={{ mt: 2 }}>
@@ -271,17 +302,7 @@ export default function AddAccount({ onAccountCreated }: AddAccountProps = {}) {
                     borderColor: accountData.brokerType === broker.value ? 'primary.main' : 'divider',
                     opacity: broker.disabled ? 0.5 : 1,
                   }}
-                  onClick={() => {
-                    if (!broker.disabled) {
-                      setAccountData({ ...accountData, brokerType: broker.value });
-                      // Auto-advance to next step for better UX
-                      if (broker.value === 'groww') {
-                        setTimeout(() => {
-                          handleNext();
-                        }, 500);
-                      }
-                    }
-                  }}
+                  onClick={() => !broker.disabled && setAccountData({ ...accountData, brokerType: broker.value })}
                 >
                   <CardContent>
                     <Box display="flex" alignItems="center" justifyContent="space-between">
@@ -307,6 +328,7 @@ export default function AddAccount({ onAccountCreated }: AddAccountProps = {}) {
             </Box>
           </Box>
         );
+
       case 2:
         if (accountData.brokerType === 'groww') {
           return (
@@ -315,16 +337,11 @@ export default function AddAccount({ onAccountCreated }: AddAccountProps = {}) {
                 <Security color="primary" />
                 <Typography variant="h6">Connect to Groww</Typography>
               </Box>
+              
               <Alert severity="info" sx={{ mb: 3 }}>
-                <Box display="flex" alignItems="center" gap={1}>
-                  <Typography variant="body1">
-                    🚀 <strong>Real-time Portfolio Sync:</strong> We'll automatically fetch your complete portfolio data from Groww
-                  </Typography>
-                </Box>
-                <Typography variant="body2" sx={{ mt: 1, opacity: 0.8 }}>
-                  • Secure browser login • Real-time data fetching • Automatic account creation
-                </Typography>
+                🚀 Click below to start the automated sync process. A browser window will open for secure Groww login.
               </Alert>
+
               {scrapingProgress.isActive && (
                 <Box sx={{ mb: 3 }}>
                   <Typography variant="subtitle2" gutterBottom>
@@ -340,15 +357,17 @@ export default function AddAccount({ onAccountCreated }: AddAccountProps = {}) {
                   </Typography>
                 </Box>
               )}
-              <Card sx={{ p: 3, textAlign: 'center', bgcolor: 'success.50', border: '2px solid', borderColor: 'success.main' }}>
+
+              <Card sx={{ p: 3, textAlign: 'center' }}>
                 <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
-                  <Box sx={{ fontSize: '48px' }}>🌱</Box>
-                  <Typography variant="h5" gutterBottom color="success.main">
-                    Ready to Sync Portfolio
+                  <Typography variant="h5">🌱</Typography>
+                  <Typography variant="h6" gutterBottom>
+                    Ready to Connect Groww
                   </Typography>
-                  <Typography variant="body1" color="text.secondary" sx={{ mb: 2, maxWidth: 300 }}>
-                    Click below to start real-time portfolio synchronization with your Groww account
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                    Click below to start automated portfolio sync
                   </Typography>
+                  
                   <Button
                     variant="contained"
                     size="large"
@@ -358,75 +377,10 @@ export default function AddAccount({ onAccountCreated }: AddAccountProps = {}) {
                     sx={{ 
                       bgcolor: 'success.main',
                       '&:hover': { bgcolor: 'success.dark' },
-                      minWidth: 250,
-                      py: 1.5,
-                      fontSize: '1.1rem',
-                      boxShadow: 3
-                    }}
-                  >
-                    {loading || scrapingProgress.isActive ? 'Syncing Portfolio...' : 'Start Portfolio Sync'}
-                  </Button>
-                  {!loading && !scrapingProgress.isActive && (
-                    <Typography variant="caption" color="text.secondary" sx={{ mt: 1 }}>
-                      🔒 Secure • 🚀 Automated • ⚡ Real-time
-                    </Typography>
-                  )}
-                </Box>
-              </Card>
-            </Box>
-          );
-        } else if (accountData.brokerType === 'manual') {
-          return (
-            <Box sx={{ mt: 2 }}>
-              <Alert severity="info" sx={{ mb: 3 }}>
-                <Typography variant="body1" gutterBottom>
-                  📝 <strong>Manual Entry Mode</strong>
-                </Typography>
-                <Typography variant="body2">
-                  You can add stocks manually after creating the account. Use this option if you want to enter portfolio data yourself.
-                </Typography>
-              </Alert>
-              <Card sx={{ p: 3, textAlign: 'center', bgcolor: 'info.50', border: '1px solid', borderColor: 'info.main' }}>
-                <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
-                  <Box sx={{ fontSize: '48px' }}>✍️</Box>
-                  <Typography variant="h6" gutterBottom color="info.main">
-                    Manual Portfolio Entry
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                    Your account will be created and you can add stocks manually
-                  </Typography>
-                  <Button
-                    variant="contained"
-                    size="large"
-                    onClick={async () => {
-                      try {
-                        setLoading(true);
-                        setError(null);
-                        await createAccount({
-                          name: accountData.name,
-                          type: 'investment',
-                          balance: 0
-                        });
-                        setSuccess('🎉 Account created successfully! You can now add stocks manually.');
-                        handleNext();
-                        if (onAccountCreated) {
-                          onAccountCreated();
-                        }
-                      } catch (err: any) {
-                        setError('Failed to create account: ' + (err.response?.data?.message || err.message));
-                      } finally {
-                        setLoading(false);
-                      }
-                    }}
-                    disabled={loading}
-                    startIcon={loading ? <CircularProgress size={20} /> : <AccountBalance />}
-                    sx={{ 
-                      bgcolor: 'info.main',
-                      '&:hover': { bgcolor: 'info.dark' },
                       minWidth: 200
                     }}
                   >
-                    {loading ? 'Creating Account...' : 'Create Account'}
+                    {loading || scrapingProgress.isActive ? 'Syncing...' : 'Login with Groww'}
                   </Button>
                 </Box>
               </Card>
@@ -435,46 +389,15 @@ export default function AddAccount({ onAccountCreated }: AddAccountProps = {}) {
         } else {
           return (
             <Box sx={{ mt: 2 }}>
-              <Alert severity="warning" sx={{ mb: 3 }}>
-                <Typography variant="body1" gutterBottom>
-                  🚧 <strong>Coming Soon</strong>
-                </Typography>
-                <Typography variant="body2">
-                  Integration with {brokerTypes.find(b => b.value === accountData.brokerType)?.label} is under development. 
-                  Please check back soon or select Groww for immediate portfolio sync.
-                </Typography>
+              <Alert severity="info">
+                {accountData.brokerType === 'manual' 
+                  ? 'Manual entry selected. You can add stocks manually after creating the account.'
+                  : 'This broker integration is coming soon.'}
               </Alert>
-              <Card sx={{ p: 3, textAlign: 'center', bgcolor: 'warning.50', border: '1px solid', borderColor: 'warning.main' }}>
-                <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
-                  <Box sx={{ fontSize: '48px' }}>🔧</Box>
-                  <Typography variant="h6" gutterBottom color="warning.main">
-                    Integration In Progress
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                    We're working on bringing automated sync for this broker
-                  </Typography>
-                  <Button
-                    variant="outlined"
-                    size="large"
-                    onClick={() => setAccountData({ ...accountData, brokerType: 'groww' })}
-                    sx={{ 
-                      borderColor: 'success.main',
-                      color: 'success.main',
-                      '&:hover': { 
-                        borderColor: 'success.dark', 
-                        color: 'success.dark',
-                        bgcolor: 'success.50'
-                      },
-                      minWidth: 200
-                    }}
-                  >
-                    Try Groww Instead
-                  </Button>
-                </Box>
-              </Card>
             </Box>
           );
         }
+
       case 3:
         return (
           <Box sx={{ mt: 2 }}>
@@ -554,20 +477,27 @@ export default function AddAccount({ onAccountCreated }: AddAccountProps = {}) {
                     <Typography variant="body2" color="text.secondary">
                       Total P&L
                     </Typography>
-                    <Typography variant="body2" fontWeight="bold" sx={{ 
-                      color: (syncResults.summary?.totalProfitLoss || 0) >= 0 ? 'green' : 'red' 
-                    }}>
-                      ₹{syncResults.summary?.totalProfitLoss?.toLocaleString() || 0} ({((syncResults.summary?.totalProfitLossPercentage || 0)).toFixed(2)}%)
+                    <Typography 
+                      variant="body2" 
+                      fontWeight="bold"
+                      color={syncResults.summary?.totalProfitLoss >= 0 ? 'green' : 'red'}
+                    >
+                      ₹{syncResults.summary?.totalProfitLoss?.toLocaleString() || 0}
                     </Typography>
                   </Box>
                 </CardContent>
               </Card>
             )}
-            <Typography variant="body1">
-              Account "{accountData.name}" has been created successfully with your Groww portfolio data!
+            
+            <Typography variant="body1" sx={{ mt: 2 }}>
+              📊 Your portfolio has been successfully scraped from Groww! Review the {syncResults?.holdings?.length || 0} holdings above.
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+              Click "Continue" below to create your account and store this portfolio data in the database.
             </Typography>
           </Box>
         );
+
       default:
         return null;
     }
@@ -578,45 +508,69 @@ export default function AddAccount({ onAccountCreated }: AddAccountProps = {}) {
       <Typography variant="h4" gutterBottom>
         Add New Account
       </Typography>
+
       <Paper sx={{ p: 3 }}>
         <Stepper activeStep={activeStep} orientation="vertical">
-          {steps.map((label, idx) => (
+          {steps.map((label, index) => (
             <Step key={label}>
               <StepLabel>{label}</StepLabel>
               <StepContent>
-                {renderStepContent(idx)}
+                {renderStepContent(index)}
+                
                 {error && (
                   <Alert severity="error" sx={{ mt: 2 }}>
                     {error}
                   </Alert>
                 )}
-                {success && !scrapingProgress.isActive && idx !== 3 && (
+
+                {success && !scrapingProgress.isActive && index !== 3 && (
                   <Alert severity="success" sx={{ mt: 2 }}>
                     {success}
                   </Alert>
                 )}
+
                 <Box sx={{ mt: 2 }}>
-                  {idx === steps.length - 1 ? (
-                    <Button
-                      variant="contained"
-                      onClick={() => window.location.reload()}
-                    >
-                      Create Another Account
-                    </Button>
+                  {index === steps.length - 1 ? (
+                    <Box>
+                      <Button
+                        variant="contained"
+                        onClick={() => {
+                          // Reset the form for another account
+                          setActiveStep(0);
+                          setAccountData({ name: '', brokerType: '' });
+                          setSyncResults(null);
+                          setError(null);
+                          setSuccess(null);
+                        }}
+                        sx={{ mr: 1 }}
+                      >
+                        Create Another Account
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        onClick={() => {
+                          if (onAccountCreated) {
+                            onAccountCreated();
+                          }
+                        }}
+                      >
+                        Go to Dashboard
+                      </Button>
+                    </Box>
                   ) : (
                     <Box>
                       <Button
                         variant="contained"
-                        onClick={idx === 0 ? validateAccountName : idx === 2 ? handleGrowwLogin : handleNext}
-                        disabled={!isStepValid(idx) || loading || scrapingProgress.isActive}
+                        onClick={index === 0 ? validateAccountName : index === 2 ? handleGrowwLogin : handleNext}
+                        disabled={!isStepValid(index) || loading || scrapingProgress.isActive}
                         startIcon={loading ? <CircularProgress size={20} /> : null}
                       >
-                        {idx === 0 ? 'Check Availability' : 
-                         idx === 2 ? 'Connect to Groww' : 
+                        {index === 0 ? 'Check Availability' : 
+                         index === 2 ? 'Connect to Groww' : 
                          'Continue'}
                       </Button>
                       <Button
-                        disabled={idx === 0 || loading || scrapingProgress.isActive}
+                        disabled={index === 0 || loading || scrapingProgress.isActive}
                         onClick={handleBack}
                         sx={{ ml: 1 }}
                       >

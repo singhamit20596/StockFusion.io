@@ -86,13 +86,32 @@ class ScrapingService {
         throw new Error(scrapingResult.message);
       }
 
-      console.log(`� Raw data scraped: ${scrapingResult.data.length} holdings`);
+      // Extract holdings from the data structure
+      const holdingsData = scrapingResult.data.holdings || scrapingResult.data || [];
+      console.log(`📜 Raw data scraped: ${holdingsData.length} holdings`);
+      console.log(`📊 Holdings data type:`, typeof holdingsData, 'Is Array:', Array.isArray(holdingsData));
+      console.log(`🔍 Sample holding:`, holdingsData[0]);
 
       // Process and store the scraped data
-      const processedStocks = await this.processScrapedData(accountId, scrapingResult.data);
+      const processedStocks = this.formatScrapedData(holdingsData);
       
-      // Calculate portfolio summary
-      const portfolioSummary = this.calculatePortfolioSummary(processedStocks);
+      // Store the processed stocks data
+      await this.storeStockData(accountId, processedStocks);
+      
+      // Calculate simple portfolio summary
+      const totalValue = processedStocks.reduce((sum, stock) => 
+        sum + (parseFloat(stock.currentValue) || 0), 0);
+      const totalInvestment = processedStocks.reduce((sum, stock) => 
+        sum + (parseFloat(stock.investment) || 0), 0);
+      const totalProfitLoss = totalValue - totalInvestment;
+      
+      const portfolioSummary = {
+        totalStocks: processedStocks.length,
+        totalValue,
+        totalInvestment,
+        totalProfitLoss,
+        totalProfitLossPercentage: totalInvestment > 0 ? (totalProfitLoss / totalInvestment) * 100 : 0
+      };
       
       // Update account with sync timestamp
       await this.updateAccountSyncStatus(accountId, {
@@ -112,8 +131,7 @@ class ScrapingService {
         success: true,
         message: `Successfully synced ${processedStocks.length} holdings from Groww (real-time)`,
         data: {
-          account: await fileService.findById('accounts.json', accountId),
-          stocks: processedStocks,
+          holdings: processedStocks,  // Frontend expects 'holdings' array
           summary: {
             totalStocks: processedStocks.length,
             totalValue: portfolioSummary.totalValue,
@@ -123,6 +141,7 @@ class ScrapingService {
             syncedAt: new Date().toISOString(),
             source: 'real-time-groww'
           },
+          account: await fileService.findById('accounts.json', accountId),
           isRealTime: true
         }
       };
@@ -500,6 +519,66 @@ class ScrapingService {
       throw error;
     }
   }
+
+  /**
+   * Format scraped data for storage
+   */
+  formatScrapedData(scrapedData) {
+    console.log(`🔧 formatScrapedData called with:`, typeof scrapedData, 'Is Array:', Array.isArray(scrapedData));
+    
+    if (!Array.isArray(scrapedData)) {
+      console.error(`❌ Expected array but got:`, typeof scrapedData, scrapedData);
+      throw new Error(`Expected array for scrapedData but got ${typeof scrapedData}`);
+    }
+    
+    return scrapedData.map(item => ({
+      symbol: item.symbol || item.name || 'UNKNOWN',
+      name: item.name || item.symbol || 'Unknown Stock',
+      quantity: parseFloat(item.units || item.quantity) || 0,
+      currentPrice: parseFloat(item.currentPrice || item.lastPrice) || 0,
+      avgPrice: parseFloat(item.avgBuyPrice || item.avgPrice) || 0,
+      investment: parseFloat(item.investedValue || item.investment) || 0,
+      currentValue: parseFloat(item.totalValue || item.currentValue) || 0,
+      pnl: parseFloat(item.profitLoss || item.pnl) || 0,
+      pnlPercentage: parseFloat(item.profitLossPercentage || item.pnlPercentage) || 0,
+      exchange: item.exchange || 'NSE',
+      scrapedAt: new Date().toISOString(),
+      source: 'real-time-groww'
+    }));
+  }
+
+  /**
+   * Store stock data for an account
+   */
+  async storeStockData(accountId, stocksData) {
+    try {
+      // Read existing stocks
+      const stocks = await fileService.readJsonFile('stocks.json');
+      
+      // Remove existing stocks for this account
+      const filteredStocks = stocks.filter(stock => stock.accountId !== accountId);
+      
+      // Add new stocks for this account
+      const newStocks = stocksData.map(stock => ({
+        ...stock,
+        id: `${accountId}_${stock.symbol}_${Date.now()}`,
+        accountId: accountId,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      }));
+      
+      // Combine and save
+      const updatedStocks = [...filteredStocks, ...newStocks];
+      await fileService.writeJsonFile('stocks.json', updatedStocks);
+      
+      console.log(`✅ Stored ${newStocks.length} stocks for account ${accountId}`);
+      return newStocks;
+    } catch (error) {
+      console.error('❌ Error storing stock data:', error);
+      throw error;
+    }
+  }
+
 }
 
 module.exports = new ScrapingService();

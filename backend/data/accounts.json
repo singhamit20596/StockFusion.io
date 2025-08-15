@@ -1,446 +1,104 @@
 [
   {
-    "id": "acc-001",
-    "name": "Main Brokerage Account",
-    "type": "brokerage",
-    "provider": "Interactive Brokers",
-    "accountNumber": "U12345678",
-    "balance": 50000,
-    "currency": "USD",
-    "isActive": true,
-    "createdAt": "2024-01-15T08:00:00.000Z",
-    "updatedAt": "2024-01-15T08:00:00.000Z"
-  },
-  {
-    "id": "acc-002",
-    "name": "Retirement 401k",
-    "type": "retirement",
-    "provider": "Fidelity",
-    "accountNumber": "401K987654",
-    "balance": 125000,
-    "currency": "USD",
-    "isActive": true,
-    "createdAt": "2024-01-10T09:30:00.000Z",
-    "updatedAt": "2024-01-10T09:30:00.000Z"
-  },
-  {
-    "id": "acc-003",
-    "name": "Emergency Savings",
-    "type": "savings",
-    "provider": "Chase Bank",
-    "accountNumber": "SAV555444",
-    "balance": 25000,
-    "currency": "USD",
-    "isActive": true,
-    "createdAt": "2024-01-05T10:15:00.000Z",
-    "updatedAt": "2024-01-05T10:15:00.000Z"
-  },
-  {
-    "id": "1754978113479hbypkr6zu",
-    "name": "Amit - Groww",
-    "type": "investment",
-    "balance": 100000,
-    "currency": "USD",
-    "description": "",
-    "isActive": true,
-    "createdAt": "2025-08-12T05:55:13.479Z",
-    "updatedAt": "2025-08-12T05:55:13.475Z"
-  },
-  {
-    "id": "1754980291391d4qplz088",
-    "name": "Amit",
-    "type": "investment",
-    "balance": 999999,
-    "currency": "USD",
-    "description": "",
-    "isActive": true,
-    "createdAt": "2025-08-12T06:31:31.391Z",
-    "updatedAt": "2025-08-12T06:31:31.388Z"
-  },
-  {
-    "id": "175498074973982ygt0gxl",
-    "name": "Test Demo Account",
-    "type": "investment",
-    "balance": 40759.5,
-    "currency": "USD",
-    "description": "",
-    "isActive": true,
-    "createdAt": "2025-08-12T06:39:09.739Z",
-    "updatedAt": "2025-08-12T06:39:23.723Z",
-    "metadata": {
-      "totalInvestment": 39000,
-      "totalProfitLoss": 1759.5,
-      "lastSyncedAt": "2025-08-12T06:39:23.723Z",
-      "source": "groww"
-    }
-  },
-  {
-    "id": "1754980821140oeg98vi0i",
-    "name": "Amit",
-    "type": "investment",
-    "balance": 100000,
-    "currency": "USD",
-    "description": "",
-    "isActive": true,
-    "createdAt": "2025-08-12T06:40:21.140Z",
-    "updatedAt": "2025-08-12T06:40:21.137Z"
-  },
-  {
-    "id": "1754982448621ci8ndgm05",
-    "name": "Test New Flow Account",
-    "type": "investment",
-    "balance": 40759.5,
-    "currency": "USD",
-    "description": "",
-    "isActive": true,
-    "createdAt": "2025-08-12T07:07:28.621Z",
-    "updatedAt": "2025-08-12T07:20:30.269Z",
-    "metadata": {
-      "totalInvestment": 39000,
-      "totalProfitLoss": 1759.5,
-      "lastSyncedAt": "2025-08-12T07:20:30.269Z",
-      "source": "groww"
-    }
-  },
-  {
-    "id": "1754985456401m0yy8d2yc",
-    "name": "Amit - Grow - 1",
+    "id": "1755192988136znh8xolgf",
+    "name": "TestAccount",
     "type": "investment",
     "balance": 0,
     "currency": "USD",
     "description": "",
     "isActive": true,
-    "createdAt": "2025-08-12T07:57:36.401Z",
-    "updatedAt": "2025-08-12T07:57:36.398Z"
-  },
-  {
-    "id": "1754985467483ipo2scemi",
-    "name": "Amit - Grow - 1",
-    "type": "investment",
-    "balance": 40759.5,
-    "currency": "USD",
-    "description": "",
-    "isActive": true,
-    "createdAt": "2025-08-12T07:57:47.483Z",
-    "updatedAt": "2025-08-12T07:59:16.992Z",
+    "createdAt": "2025-08-14T17:36:28.136Z",
+    "updatedAt": "2025-08-14T17:37:35.109Z",
     "metadata": {
-      "totalInvestment": 39000,
-      "totalProfitLoss": 1759.5,
-      "lastSyncedAt": "2025-08-12T07:59:16.992Z",
-      "source": "groww"
+      "lastSyncAt": "2025-08-14T17:37:35.108Z",
+      "lastSyncStatus": "success",
+      "stocksCount": 16,
+      "totalValue": 785740.3699999999
     }
   },
   {
-    "id": "17549860566572h5tm4af7",
-    "name": "Test Real Groww Login",
-    "type": "investment",
-    "balance": 40759.5,
-    "currency": "USD",
-    "description": "",
-    "isActive": true,
-    "createdAt": "2025-08-12T08:07:36.657Z",
-    "updatedAt": "2025-08-12T08:21:25.008Z",
-    "metadata": {
-      "totalInvestment": 39000,
-      "totalProfitLoss": 1759.5,
-      "lastSyncedAt": "2025-08-12T08:21:25.007Z",
-      "source": "groww"
-    }
-  },
-  {
-    "id": "17549861530486hnvy03iu",
-    "name": "1",
-    "type": "investment",
-    "balance": 40759.5,
-    "currency": "USD",
-    "description": "",
-    "isActive": true,
-    "createdAt": "2025-08-12T08:09:13.048Z",
-    "updatedAt": "2025-08-12T08:11:19.348Z",
-    "metadata": {
-      "totalInvestment": 39000,
-      "totalProfitLoss": 1759.5,
-      "lastSyncedAt": "2025-08-12T08:11:19.348Z",
-      "source": "groww"
-    }
-  },
-  {
-    "id": "1754986970137peh3w9669",
-    "name": "2",
-    "type": "investment",
-    "balance": 40759.5,
-    "currency": "USD",
-    "description": "",
-    "isActive": true,
-    "createdAt": "2025-08-12T08:22:50.137Z",
-    "updatedAt": "2025-08-12T08:23:50.445Z",
-    "metadata": {
-      "totalInvestment": 39000,
-      "totalProfitLoss": 1759.5,
-      "lastSyncedAt": "2025-08-12T08:23:50.445Z",
-      "source": "groww"
-    }
-  },
-  {
-    "id": "1754988856625fst6gi3y0",
+    "id": "1755193210730grk5j7ug6",
     "name": "3",
     "type": "investment",
     "balance": 0,
     "currency": "USD",
     "description": "",
     "isActive": true,
-    "createdAt": "2025-08-12T08:54:16.625Z",
-    "updatedAt": "2025-08-12T08:54:16.623Z"
+    "createdAt": "2025-08-14T17:40:10.730Z",
+    "updatedAt": "2025-08-14T17:41:06.805Z",
+    "metadata": {
+      "lastSyncAt": "2025-08-14T17:41:06.805Z",
+      "lastSyncStatus": "success",
+      "stocksCount": 16,
+      "totalValue": 785740.3699999999
+    }
   },
   {
-    "id": "1754990095241ekdwr89ru",
+    "id": "17551933336236qgd4qyxb",
     "name": "4",
     "type": "investment",
     "balance": 0,
     "currency": "USD",
     "description": "",
     "isActive": true,
-    "createdAt": "2025-08-12T09:14:55.241Z",
-    "updatedAt": "2025-08-12T09:15:31.004Z",
+    "createdAt": "2025-08-14T17:42:13.623Z",
+    "updatedAt": "2025-08-14T17:43:14.913Z",
     "metadata": {
-      "lastSyncAt": "2025-08-12T09:15:30.978Z",
-      "lastSyncStatus": "failed",
-      "lastSyncError": "User not logged in or session expired"
+      "lastSyncAt": "2025-08-14T17:43:14.913Z",
+      "lastSyncStatus": "success",
+      "stocksCount": 19,
+      "totalValue": 920861.7600000001
     }
   },
   {
-    "id": "1755054173372k1pijrhve",
-    "name": "5",
+    "id": "1755194401392y44zjd8ea",
+    "name": "amit",
     "type": "investment",
     "balance": 0,
     "currency": "USD",
     "description": "",
     "isActive": true,
-    "createdAt": "2025-08-13T03:02:53.372Z",
-    "updatedAt": "2025-08-13T03:02:53.372Z"
+    "createdAt": "2025-08-14T18:00:01.392Z",
+    "updatedAt": "2025-08-14T18:01:23.321Z",
+    "metadata": {
+      "lastSyncAt": "2025-08-14T18:01:23.321Z",
+      "lastSyncStatus": "success",
+      "stocksCount": 19,
+      "totalValue": 920861.7600000001
+    }
   },
   {
-    "id": "1755054207617nhobvx3b4",
-    "name": "5",
+    "id": "175519546632289oj3z21s",
+    "name": "Preetii",
     "type": "investment",
     "balance": 0,
     "currency": "USD",
     "description": "",
     "isActive": true,
-    "createdAt": "2025-08-13T03:03:27.617Z",
-    "updatedAt": "2025-08-13T03:11:27.904Z",
+    "createdAt": "2025-08-14T18:17:46.322Z",
+    "updatedAt": "2025-08-14T18:18:42.857Z",
     "metadata": {
-      "lastSyncAt": "2025-08-13T03:11:27.904Z",
-      "lastSyncStatus": "failed",
-      "lastSyncError": "User not logged in or session expired"
+      "lastSyncAt": "2025-08-14T18:18:42.856Z",
+      "lastSyncStatus": "success",
+      "stocksCount": 16,
+      "totalValue": 785740.3699999999
     }
   },
   {
-    "id": "17550544036678nw1xaax1",
+    "id": "1755195878657g3o09evv9",
     "name": "6",
     "type": "investment",
     "balance": 0,
     "currency": "USD",
     "description": "",
     "isActive": true,
-    "createdAt": "2025-08-13T03:06:43.667Z",
-    "updatedAt": "2025-08-13T03:06:59.605Z",
+    "createdAt": "2025-08-14T18:24:38.657Z",
+    "updatedAt": "2025-08-14T18:25:35.127Z",
     "metadata": {
-      "lastSyncAt": "2025-08-13T03:06:59.605Z",
-      "lastSyncStatus": "failed",
-      "lastSyncError": "User not logged in or session expired"
+      "lastSyncAt": "2025-08-14T18:25:35.127Z",
+      "lastSyncStatus": "success",
+      "stocksCount": 16,
+      "totalValue": 785740.3699999999
     }
-  },
-  {
-    "id": "1755054767869t45303dy2",
-    "name": "7",
-    "type": "investment",
-    "balance": 0,
-    "currency": "USD",
-    "description": "",
-    "isActive": true,
-    "createdAt": "2025-08-13T03:12:47.869Z",
-    "updatedAt": "2025-08-13T03:13:08.666Z",
-    "metadata": {
-      "lastSyncAt": "2025-08-13T03:13:08.666Z",
-      "lastSyncStatus": "failed",
-      "lastSyncError": "User not logged in or session expired"
-    }
-  },
-  {
-    "id": "17550552067315ubz5de4t",
-    "name": "8",
-    "type": "investment",
-    "balance": 0,
-    "currency": "USD",
-    "description": "",
-    "isActive": true,
-    "createdAt": "2025-08-13T03:20:06.731Z",
-    "updatedAt": "2025-08-13T03:20:06.730Z"
-  },
-  {
-    "id": "1755055210515c29btb3oz",
-    "name": "8",
-    "type": "investment",
-    "balance": 0,
-    "currency": "USD",
-    "description": "",
-    "isActive": true,
-    "createdAt": "2025-08-13T03:20:10.515Z",
-    "updatedAt": "2025-08-13T03:20:10.513Z"
-  },
-  {
-    "id": "1755055212190jx65pxis7",
-    "name": "8",
-    "type": "investment",
-    "balance": 0,
-    "currency": "USD",
-    "description": "",
-    "isActive": true,
-    "createdAt": "2025-08-13T03:20:12.190Z",
-    "updatedAt": "2025-08-13T03:20:12.190Z"
-  },
-  {
-    "id": "1755055260279sj1n0a62m",
-    "name": "8",
-    "type": "investment",
-    "balance": 0,
-    "currency": "USD",
-    "description": "",
-    "isActive": true,
-    "createdAt": "2025-08-13T03:21:00.279Z",
-    "updatedAt": "2025-08-13T03:21:00.278Z"
-  },
-  {
-    "id": "1755055452001rtsc0zvno",
-    "name": "9",
-    "type": "investment",
-    "balance": 0,
-    "currency": "USD",
-    "description": "",
-    "isActive": true,
-    "createdAt": "2025-08-13T03:24:12.001Z",
-    "updatedAt": "2025-08-13T03:24:11.999Z"
-  },
-  {
-    "id": "1755055519629bp0w5a12k",
-    "name": "9",
-    "type": "investment",
-    "balance": 0,
-    "currency": "USD",
-    "description": "",
-    "isActive": true,
-    "createdAt": "2025-08-13T03:25:19.629Z",
-    "updatedAt": "2025-08-13T03:25:19.626Z"
-  },
-  {
-    "id": "1755055533383zyq28igu1",
-    "name": "10",
-    "type": "investment",
-    "balance": 0,
-    "currency": "USD",
-    "description": "",
-    "isActive": true,
-    "createdAt": "2025-08-13T03:25:33.383Z",
-    "updatedAt": "2025-08-13T03:25:33.383Z"
-  },
-  {
-    "id": "1755056083151n1xvwjm6w",
-    "name": "11",
-    "type": "investment",
-    "balance": 0,
-    "currency": "USD",
-    "description": "",
-    "isActive": true,
-    "createdAt": "2025-08-13T03:34:43.151Z",
-    "updatedAt": "2025-08-13T03:34:43.150Z"
-  },
-  {
-    "id": "1755057380857m5dbhpx6w",
-    "name": "12",
-    "type": "investment",
-    "balance": 0,
-    "currency": "USD",
-    "description": "",
-    "isActive": true,
-    "createdAt": "2025-08-13T03:56:20.857Z",
-    "updatedAt": "2025-08-13T03:56:20.857Z"
-  },
-  {
-    "id": "1755057389669qlols5r6v",
-    "name": "12",
-    "type": "investment",
-    "balance": 0,
-    "currency": "USD",
-    "description": "",
-    "isActive": true,
-    "createdAt": "2025-08-13T03:56:29.669Z",
-    "updatedAt": "2025-08-13T03:56:29.668Z"
-  },
-  {
-    "id": "1755057391069kwgg17m8t",
-    "name": "12",
-    "type": "investment",
-    "balance": 0,
-    "currency": "USD",
-    "description": "",
-    "isActive": true,
-    "createdAt": "2025-08-13T03:56:31.069Z",
-    "updatedAt": "2025-08-13T03:56:31.067Z"
-  },
-  {
-    "id": "17550574027728ipecytsn",
-    "name": "12",
-    "type": "investment",
-    "balance": 0,
-    "currency": "USD",
-    "description": "",
-    "isActive": true,
-    "createdAt": "2025-08-13T03:56:42.772Z",
-    "updatedAt": "2025-08-13T03:56:42.771Z"
-  },
-  {
-    "id": "1755095045450ap99pus9e",
-    "name": "15",
-    "type": "investment",
-    "balance": 125000,
-    "currency": "USD",
-    "description": "",
-    "isActive": true,
-    "createdAt": "2025-08-13T14:24:05.450Z",
-    "updatedAt": "2025-08-13T14:24:05.449Z"
-  },
-  {
-    "id": "17550950770630benrhqi1",
-    "name": "16",
-    "type": "investment",
-    "balance": 125000,
-    "currency": "USD",
-    "description": "",
-    "isActive": true,
-    "createdAt": "2025-08-13T14:24:37.063Z",
-    "updatedAt": "2025-08-13T14:24:37.062Z"
-  },
-  {
-    "id": "1755095121722gmbdce925",
-    "name": "14",
-    "type": "investment",
-    "balance": 125000,
-    "currency": "USD",
-    "description": "",
-    "isActive": true,
-    "createdAt": "2025-08-13T14:25:21.722Z",
-    "updatedAt": "2025-08-13T14:25:21.721Z"
-  },
-  {
-    "id": "1755097426172r128zyllp",
-    "name": "78",
-    "type": "investment",
-    "balance": 125000,
-    "currency": "USD",
-    "description": "",
-    "isActive": true,
-    "createdAt": "2025-08-13T15:03:46.172Z",
-    "updatedAt": "2025-08-13T15:03:46.171Z"
   }
 ]

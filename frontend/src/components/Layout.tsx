@@ -40,6 +40,8 @@ interface LayoutProps {
   currentPage: string;
   onPageChange: (page: string) => void;
   onDataRefresh?: () => void; // Add callback for refreshing dashboard
+  selectedAccountId?: string; // Add selected account state
+  onAccountSelect?: (accountId: string, accountName?: string) => void; // Add account selection callback
 }
 
 interface AccountWithSync extends Account {
@@ -53,7 +55,7 @@ interface SyncState {
   };
 }
 
-export default function Layout({ children, currentPage, onPageChange, onDataRefresh }: LayoutProps) {
+export default function Layout({ children, currentPage, onPageChange, onDataRefresh, selectedAccountId, onAccountSelect }: LayoutProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [accounts, setAccounts] = useState<AccountWithSync[]>([]);
   const [loading, setLoading] = useState(true);
@@ -162,13 +164,13 @@ export default function Layout({ children, currentPage, onPageChange, onDataRefr
 
   const getTotalInvestment = () => {
     return accounts.reduce((total, account) => {
-      return total + (account.syncStatus?.totalInvestment || account.balance || 0);
+      return total + (account.syncStatus?.totalInvestment || 0);
     }, 0);
   };
 
   const getTotalValue = () => {
     return accounts.reduce((total, account) => {
-      return total + (account.syncStatus?.totalValue || account.balance || 0);
+      return total + (account.syncStatus?.totalValue || 0);
     }, 0);
   };
 
@@ -176,6 +178,12 @@ export default function Layout({ children, currentPage, onPageChange, onDataRefr
     return accounts.reduce((total, account) => {
       return total + (account.syncStatus?.totalProfitLoss || 0);
     }, 0);
+  };
+
+  const getTotalProfitLossPercentage = () => {
+    const totalInvestment = getTotalInvestment();
+    const totalProfitLoss = getTotalProfitLoss();
+    return totalInvestment > 0 ? (totalProfitLoss / totalInvestment) * 100 : 0;
   };
 
   const getLastSyncDate = () => {
@@ -248,7 +256,7 @@ export default function Layout({ children, currentPage, onPageChange, onDataRefr
             </Box>
             <Box display="flex" justifyContent="space-between" mb={1}>
               <Typography variant="body2" color="text.secondary">
-                Profit/Loss
+                Total P&L
               </Typography>
               <Typography
                 variant="body2"
@@ -256,6 +264,18 @@ export default function Layout({ children, currentPage, onPageChange, onDataRefr
                 color={getTotalProfitLoss() >= 0 ? 'success.main' : 'error.main'}
               >
                 {formatCurrency(getTotalProfitLoss())}
+              </Typography>
+            </Box>
+            <Box display="flex" justifyContent="space-between" mb={1}>
+              <Typography variant="body2" color="text.secondary">
+                Overall P&L%
+              </Typography>
+              <Typography
+                variant="body2"
+                fontWeight="bold"
+                color={getTotalProfitLossPercentage() >= 0 ? 'success.main' : 'error.main'}
+              >
+                {getTotalProfitLossPercentage() >= 0 ? '+' : ''}{getTotalProfitLossPercentage().toFixed(2)}%
               </Typography>
             </Box>
             <Divider sx={{ my: 1 }} />
@@ -300,7 +320,9 @@ export default function Layout({ children, currentPage, onPageChange, onDataRefr
           </Box>
         ) : (
           <List dense>
-            {accounts.map((account) => (
+            {accounts
+              .sort((a, b) => new Date((b as any).createdAt || (b as any).updatedAt || 0).getTime() - new Date((a as any).createdAt || (a as any).updatedAt || 0).getTime())
+              .map((account) => (
               <ListItem
                 key={account.id}
                 sx={{ px: 0 }}
@@ -314,7 +336,10 @@ export default function Layout({ children, currentPage, onPageChange, onDataRefr
                     <Tooltip title="Sync Account">
                       <IconButton
                         size="small"
-                        onClick={() => handleSyncAccount(account.id, account.name)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleSyncAccount(account.id, account.name);
+                        }}
                         disabled={syncStates[account.id]?.isLoading || !account.syncStatus?.hasGrowwData}
                         color="primary"
                       >
@@ -328,10 +353,17 @@ export default function Layout({ children, currentPage, onPageChange, onDataRefr
                   </Box>
                 }
               >
-                <ListItemIcon>
-                  <AccountBalance fontSize="small" />
-                </ListItemIcon>
-                <ListItemText
+                <ListItemButton 
+                  onClick={() => {
+                    onAccountSelect?.(account.id, account.name);
+                  }}
+                  selected={selectedAccountId === account.id}
+                  sx={{ borderRadius: 1 }}
+                >
+                  <ListItemIcon>
+                    <AccountBalance fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText
                   primary={
                     <Box display="flex" alignItems="center" gap={1}>
                       <Typography variant="body2" fontWeight="medium">
@@ -375,6 +407,7 @@ export default function Layout({ children, currentPage, onPageChange, onDataRefr
                     </Box>
                   }
                 />
+                </ListItemButton>
               </ListItem>
             ))}
           </List>

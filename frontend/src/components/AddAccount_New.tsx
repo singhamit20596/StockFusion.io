@@ -237,9 +237,6 @@ export default function AddAccount({ onAccountCreated, onShowAccountDetails }: A
 
       console.log('✅ Holdings saved:', holdingsResponse.data);
 
-      // 3. Fetch the saved data from backend to display actual stored data
-      await fetchSavedAccountData(createdAccount.id);
-
       setSuccess(`🎉 Data saved for account "${accountData.name}"! Account created with ${scrapedHoldings.length} holdings.`);
       
       // Trigger callback to refresh accounts list
@@ -252,38 +249,6 @@ export default function AddAccount({ onAccountCreated, onShowAccountDetails }: A
       setError('Failed to save account: ' + (err.response?.data?.message || err.message));
     } finally {
       setLoading(false);
-    }
-  };
-
-  // Fetch saved account data from backend
-  const fetchSavedAccountData = async (accountId: string) => {
-    try {
-      console.log('🔄 Fetching saved account data from backend...');
-      
-      // Fetch stocks for this account
-      const stocksResponse = await axios.get(`${API_BASE_URL}/api/stocks/account/${accountId}`);
-      const savedStocks = stocksResponse.data.data || [];
-      
-      console.log('✅ Fetched saved stocks:', savedStocks);
-      
-      // Update holdings with saved data
-      setScrapedHoldings(savedStocks);
-      
-      // Update portfolio summary with actual saved data
-      const updatedSummary = {
-        totalInvestment: savedStocks.reduce((sum: number, stock: any) => sum + (stock.investment || 0), 0),
-        totalValue: savedStocks.reduce((sum: number, stock: any) => sum + (stock.currentValue || 0), 0),
-        totalPnL: savedStocks.reduce((sum: number, stock: any) => sum + (stock.pnl || 0), 0),
-        stocksCount: savedStocks.length
-      };
-      
-      setPortfolioSummary(updatedSummary);
-      
-      console.log('✅ Updated portfolio summary:', updatedSummary);
-      
-    } catch (err: any) {
-      console.error('❌ Error fetching saved account data:', err);
-      // Don't throw error here, just log it as the main save operation was successful
     }
   };
 
@@ -477,7 +442,6 @@ export default function AddAccount({ onAccountCreated, onShowAccountDetails }: A
                   {/* Portfolio Summary */}
                   <Box sx={{ mb: 3, p: 2, bgcolor: 'background.default', borderRadius: 1 }}>
                     <Typography variant="h6" gutterBottom>Summary</Typography>
-                    
                     <Box display="flex" justifyContent="space-between" mb={1}>
                       <Typography variant="body2" color="text.secondary">Total Holdings</Typography>
                       <Typography variant="body2" fontWeight="bold">{scrapedHoldings.length}</Typography>
@@ -530,32 +494,32 @@ export default function AddAccount({ onAccountCreated, onShowAccountDetails }: A
                               </Typography>
                             </td>
                             <td style={{ padding: '12px 8px', textAlign: 'right' }}>
-                              <Typography variant="body2">{holding.quantity || holding.units}</Typography>
+                              <Typography variant="body2">{holding.units || holding.quantity}</Typography>
                             </td>
                             <td style={{ padding: '12px 8px', textAlign: 'right' }}>
-                              <Typography variant="body2">₹{(holding.avgPrice || holding.avgBuyPrice || holding.averagePrice || 0).toFixed(2)}</Typography>
+                              <Typography variant="body2">₹{(holding.avgBuyPrice || holding.averagePrice || holding.avgPrice || 0).toFixed(2)}</Typography>
                             </td>
                             <td style={{ padding: '12px 8px', textAlign: 'right' }}>
                               <Typography variant="body2">₹{(holding.currentPrice || holding.ltp || 0).toFixed(2)}</Typography>
                             </td>
                             <td style={{ padding: '12px 8px', textAlign: 'right' }}>
-                              <Typography variant="body2">₹{(holding.investment || holding.investedValue || 0).toLocaleString()}</Typography>
+                              <Typography variant="body2">₹{(holding.investedValue || holding.investment || 0).toLocaleString()}</Typography>
                             </td>
                             <td style={{ padding: '12px 8px', textAlign: 'right' }}>
-                              <Typography variant="body2">₹{(holding.currentValue || holding.totalValue || 0).toLocaleString()}</Typography>
+                              <Typography variant="body2">₹{(holding.totalValue || holding.currentValue || 0).toLocaleString()}</Typography>
                             </td>
                             <td style={{ padding: '12px 8px', textAlign: 'right' }}>
                               <Chip
-                                label={`₹${(holding.pnl || holding.profitLoss || 0).toLocaleString()}`}
-                                color={(holding.pnl || holding.profitLoss || 0) >= 0 ? 'success' : 'error'}
+                                label={`₹${(holding.profitLoss || holding.pnl || 0).toLocaleString()}`}
+                                color={(holding.profitLoss || holding.pnl || 0) >= 0 ? 'success' : 'error'}
                                 size="small"
                                 variant="outlined"
                               />
                             </td>
                             <td style={{ padding: '12px 8px', textAlign: 'right' }}>
                               <Chip
-                                label={`${(holding.pnlPercentage || holding.profitLossPercentage || 0).toFixed(2)}%`}
-                                color={(holding.pnlPercentage || holding.profitLossPercentage || 0) >= 0 ? 'success' : 'error'}
+                                label={`${(holding.profitLossPercentage || 0).toFixed(2)}%`}
+                                color={(holding.profitLossPercentage || 0) >= 0 ? 'success' : 'error'}
                                 size="small"
                                 variant="outlined"
                               />
@@ -570,35 +534,32 @@ export default function AddAccount({ onAccountCreated, onShowAccountDetails }: A
             )}
             
             <Box sx={{ display: 'flex', gap: 2, mt: 2 }}>
-              {!createdAccountId ? (
-                <Button
-                  variant="contained"
-                  onClick={saveAccountAndHoldings}
-                  disabled={loading || scrapedHoldings.length === 0}
-                  startIcon={loading ? <CircularProgress size={20} /> : <CheckCircle />}
-                  sx={{ 
-                    bgcolor: 'success.main',
-                    '&:hover': { bgcolor: 'success.dark' }
-                  }}
-                >
-                  {loading ? 'Saving...' : 'Save Account & Holdings'}
-                </Button>
-              ) : (
-                <Button
-                  variant="contained"
-                  onClick={() => {
-                    if (onAccountCreated) {
-                      onAccountCreated();
-                    }
-                  }}
-                  sx={{ 
-                    bgcolor: 'primary.main',
-                    '&:hover': { bgcolor: 'primary.dark' }
-                  }}
-                >
-                  Done
-                </Button>
-              )}
+              <Button
+                variant="contained"
+                onClick={saveAccountAndHoldings}
+                disabled={loading || scrapedHoldings.length === 0}
+                startIcon={loading ? <CircularProgress size={20} /> : <CheckCircle />}
+                sx={{ 
+                  bgcolor: 'success.main',
+                  '&:hover': { bgcolor: 'success.dark' }
+                }}
+              >
+                {loading ? 'Saving...' : 'Save Account & Holdings'}
+              </Button>
+              
+              <Button
+                variant="outlined"
+                onClick={() => {
+                  if (onShowAccountDetails && createdAccountId) {
+                    onShowAccountDetails(createdAccountId);
+                  } else if (onAccountCreated) {
+                    onAccountCreated();
+                  }
+                }}
+                disabled={loading || !createdAccountId}
+              >
+                Show Account Details
+              </Button>
             </Box>
             
             {error && (

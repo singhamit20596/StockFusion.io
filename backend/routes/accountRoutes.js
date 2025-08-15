@@ -9,6 +9,7 @@ router.post('/accounts', accountController.createAccount);
 router.put('/accounts/:id', accountController.updateAccount);
 router.delete('/accounts/:id', accountController.deleteAccount);
 router.get('/accounts/:id/summary', accountController.getAccountSummary);
+router.get('/accounts/:id/holdings', accountController.getAccountHoldings);
 
 // New endpoint for sync and create workflow
 router.post('/accounts/sync-groww', accountController.syncGrowwAndCreateAccount);

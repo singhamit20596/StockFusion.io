@@ -320,6 +320,86 @@ class StockController {
       });
     }
   }
+
+  /**
+   * Bulk create stocks for an account
+   * POST /api/stocks/bulk-create
+   */
+  async bulkCreateStocks(req, res) {
+    try {
+      const { accountId, holdings } = req.body;
+
+      // Validate request
+      if (!accountId || !holdings || !Array.isArray(holdings)) {
+        return res.status(400).json({
+          success: false,
+          message: 'AccountId and holdings array are required'
+        });
+      }
+
+      // Verify account exists
+      const account = await fileService.findById('accounts.json', accountId);
+      if (!account) {
+        return res.status(404).json({
+          success: false,
+          message: 'Account not found'
+        });
+      }
+
+      // Convert holdings to stock format and create Stock models
+      const createdStocks = [];
+      const currentTime = new Date().toISOString();
+
+      for (const holding of holdings) {
+        const stockData = {
+          id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+          accountId: accountId,
+          symbol: holding.symbol || holding.name || 'UNKNOWN',
+          name: holding.name || holding.symbol || 'Unknown Stock',
+          quantity: parseFloat(holding.units || holding.quantity) || 0,
+          purchasePrice: parseFloat(holding.avgBuyPrice || holding.avgPrice) || 0,
+          currentPrice: parseFloat(holding.currentPrice) || 0,
+          sector: holding.sector || 'Unknown',
+          exchange: holding.exchange || 'NSE',
+          metadata: {
+            investedValue: parseFloat(holding.investment || holding.investedValue) || 0,
+            currentValue: parseFloat(holding.currentValue || holding.totalValue) || 0,
+            profitLoss: parseFloat(holding.pnl || holding.profitLoss) || 0,
+            profitLossPercentage: parseFloat(holding.profitLossPercentage) || 0,
+            dayChangePercentage: parseFloat(holding.dayChangePercentage) || 0,
+            scrapedAt: holding.scrapedAt || currentTime,
+            source: holding.source || 'groww-scraping'
+          },
+          createdAt: currentTime,
+          updatedAt: currentTime
+        };
+
+        const stock = new Stock(stockData);
+        const savedStock = await fileService.create('stocks.json', stock.toJSON());
+        createdStocks.push(savedStock);
+      }
+
+      console.log(`✅ Bulk created ${createdStocks.length} stocks for account ${accountId}`);
+
+      res.status(201).json({
+        success: true,
+        message: `Successfully created ${createdStocks.length} stocks`,
+        data: {
+          accountId: accountId,
+          createdCount: createdStocks.length,
+          stocks: createdStocks
+        }
+      });
+
+    } catch (error) {
+      console.error('❌ Bulk create stocks error:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Error creating stocks',
+        error: error.message
+      });
+    }
+  }
 }
 
 module.exports = new StockController();
